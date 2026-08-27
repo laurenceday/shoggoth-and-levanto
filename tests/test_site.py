@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import shutil
 import tempfile
 import time
 import unittest
@@ -12,6 +13,7 @@ from scripts.check_site import (
     CREDENTIAL,
     PAGES,
     PRIVATE_PATH,
+    PageParser,
     check_site,
     iter_text_files,
     local_target,
@@ -31,6 +33,17 @@ class SiteContractTests(unittest.TestCase):
         cls.pages = parse_pages(ROOT, cls.findings)
         cls.sources = json.loads((ROOT / "evidence" / "sources.json").read_text(encoding="utf-8"))
         cls.claims = json.loads((ROOT / "evidence" / "claims.json").read_text(encoding="utf-8"))
+
+    def copy_site(self, directory: str) -> Path:
+        destination = Path(directory) / "site"
+        shutil.copytree(
+            ROOT,
+            destination,
+            ignore=shutil.ignore_patterns(
+                ".git", ".venv", ".hexaemeron", ".elenchus", ".metron", "__pycache__"
+            ),
+        )
+        return destination
 
     def test_complete_site_check_is_clean(self) -> None:
         self.assertEqual(check_site(ROOT), [])
@@ -87,6 +100,76 @@ class SiteContractTests(unittest.TestCase):
                     if fragment and target.suffix == ".html":
                         target_page = self.pages[str(target.relative_to(ROOT))]
                         self.assertIn(fragment, target_page.ids)
+
+    def test_duplicate_ids_are_rejected(self) -> None:
+        parser = PageParser()
+        parser.feed('<main id="same"><p id="same">duplicate</p></main>')
+        parser.close()
+        self.assertEqual(getattr(parser, "duplicate_ids", set()), {"same"})
+
+    def test_hidden_runtime_inputs_are_rejected_and_measured(self) -> None:
+        with self.assertRaises(ValueError):
+            local_target(ROOT, "index.html", "javascript:alert(1)")
+        parser = PageParser()
+        parser.feed('<meta http-equiv="refresh" content="0"><a onclick="run()">x</a>')
+        parser.close()
+        self.assertTrue(getattr(parser, "refresh_meta", False))
+        self.assertEqual(getattr(parser, "runtime_attributes", []), ["onclick"])
+        with tempfile.TemporaryDirectory() as directory:
+            root = self.copy_site(directory)
+            (root / "runtime.js").write_text("alert(1);\n", encoding="utf-8")
+            codes = {finding.code for finding in check_site(root)}
+            self.assertIn("S078", codes)
+            self.assertGreater(measure(root)["measurements"]["site.runtime_javascript_bytes"], 0)
+
+    def test_image_sources_must_be_local_webp_files(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = self.copy_site(directory)
+            path = root / "index.html"
+            text = path.read_text(encoding="utf-8")
+            text = text.replace(
+                "</main>",
+                '<img src="https://example.com/copied.png" alt="copied" width="10" height="10">\n</main>',
+            )
+            path.write_text(text, encoding="utf-8")
+            codes = {finding.code for finding in check_site(root)}
+            self.assertIn("S023", codes)
+
+    def test_extra_page_and_reference_source_mirror_are_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = self.copy_site(directory)
+            (root / "rogue.html").write_text("<!doctype html><title>rogue</title>\n", encoding="utf-8")
+            mirror = root / "mascot-imagegen-kit-main"
+            mirror.mkdir()
+            (mirror / "reference.txt").write_text("reference bytes\n", encoding="utf-8")
+            codes = {finding.code for finding in check_site(root)}
+            self.assertIn("S004", codes)
+            self.assertIn("S077", codes)
+
+    def test_source_urls_require_full_https_without_credentials(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = self.copy_site(directory)
+            path = root / "evidence" / "sources.json"
+            document = json.loads(path.read_text(encoding="utf-8"))
+            document["sources"][0]["url"] = "https:relative"
+            document["sources"][1]["url"] = "https://user:pass@example.com/source"
+            path.write_text(json.dumps(document, indent=2) + "\n", encoding="utf-8")
+            url_findings = [finding for finding in check_site(root) if finding.code == "S048"]
+            self.assertEqual(len(url_findings), 2)
+
+    def test_duplicate_json_keys_are_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = self.copy_site(directory)
+            path = root / "evidence" / "sources.json"
+            text = path.read_text(encoding="utf-8")
+            text = text.replace(
+                '  "schema": "source-registry-v1",',
+                '  "schema": "source-registry-v1",\n  "schema": "source-registry-v1",',
+                1,
+            )
+            path.write_text(text, encoding="utf-8")
+            codes = {finding.code for finding in check_site(root)}
+            self.assertIn("S040", codes)
 
     def test_stylesheet_is_local_and_versioned(self) -> None:
         versions = set()
@@ -171,6 +254,23 @@ class SiteContractTests(unittest.TestCase):
             self.assertEqual(count, 0)
             report = json.loads((root / ".elenchus" / "empty.json").read_text(encoding="utf-8"))
             self.assertEqual(report["testsRun"], 0)
+
+    def test_runner_keeps_repository_on_path_during_test_execution(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            tests = root / "tests"
+            tests.mkdir()
+            source = (
+                "import sys\n"
+                "import unittest\n\n"
+                "class RuntimePathTest(unittest.TestCase):\n"
+                "    def test_repository_root_is_visible(self):\n"
+                f"        self.assertIn({str(root)!r}, sys.path)\n"
+            )
+            (tests / "test_runtime_path.py").write_text(source, encoding="utf-8")
+            success, count = run(root, root / ".elenchus" / "path.json", verbosity=0)
+            self.assertTrue(success)
+            self.assertEqual(count, 1)
 
     def test_decision_records_and_licence_boundary_are_present(self) -> None:
         decisions = sorted((ROOT / "docs" / "decisions").glob("ADR-*.md"))
