@@ -1,0 +1,39 @@
+{
+  "budgets": [
+    {
+      "name": "site.max_html_bytes",
+      "unit": "bytes",
+      "limit": 102400,
+      "variance": 0.02,
+      "direction": "lower_is_better"
+    },
+    {
+      "name": "site.css_bytes",
+      "unit": "bytes",
+      "limit": 24576,
+      "variance": 0.02,
+      "direction": "lower_is_better"
+    },
+    {
+      "name": "site.max_webp_bytes",
+      "unit": "bytes",
+      "limit": 204800,
+      "variance": 0.02,
+      "direction": "lower_is_better"
+    },
+    {
+      "name": "site.index_first_load_bytes",
+      "unit": "bytes",
+      "limit": 358400,
+      "variance": 0.02,
+      "direction": "lower_is_better"
+    },
+    {
+      "name": "site.runtime_javascript_bytes",
+      "unit": "bytes",
+      "limit": 0,
+      "variance": 0,
+      "direction": "lower_is_better"
+    }
+  ]
+}

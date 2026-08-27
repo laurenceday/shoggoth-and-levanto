@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Engineering constraints for any separately authorised live Sage adapter.">
+  <meta name="theme-color" content="#071312">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Shoggoth + Levanto">
+  <meta property="og:title" content="Shoggoth + Levanto">
+  <meta property="og:description" content="A second opinion. Not a second authority.">
+  <meta property="og:url" content="https://laurenceday.github.io/shoggoth-and-levanto/engineering-primer.html">
+  <meta property="og:image" content="https://laurenceday.github.io/shoggoth-and-levanto/assets/generated/social-preview.webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Shoggoth and Levanto meet at a cooperative threshold">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Shoggoth + Levanto">
+  <meta name="twitter:description" content="A second opinion. Not a second authority.">
+  <meta name="twitter:image" content="https://laurenceday.github.io/shoggoth-and-levanto/assets/generated/social-preview.webp">
+  <link rel="canonical" href="https://laurenceday.github.io/shoggoth-and-levanto/engineering-primer.html">
+  <title>Engineering | Make every crossing explicit</title>
+  <link rel="stylesheet" href="assets/style.css?v=20260827-4">
+</head>
+<body data-page="engineering-primer">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <nav class="nav-shell" aria-label="Primary">
+      <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span><span>Shoggoth + Levanto</span></a>
+      <div class="nav-links">
+        <a href="index.html">Overview</a><a href="sage.html">Sage</a><a href="shoggoth.html">Shoggoth</a><a href="handoffs.html">Hand-offs</a><a href="architecture.html">Architecture</a><a href="policy.html">Policy</a><a href="pilot.html">Pilot</a><a href="limits.html">Limits</a><a href="engineering-primer.html" aria-current="page">Engineering</a><a href="sources.html">Sources</a>
+      </div>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="hero-shell">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Future implementation boundary</p>
+          <h1>If this goes live, <em>the boundary is the product.</em></h1>
+          <p class="lede claim" data-claim="ENG-THESIS" data-status="proposed">A useful adapter is not a thin HTTP wrapper. It is the closed packet, secret boundary, response validator, deterministic route, evidence record and recovery path around that call.</p>
+          <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+        </div>
+        <aside class="status-stack" aria-label="Page status">
+          <span class="status" data-status="proposed">Primer only</span>
+          <p>Implementation needs a new authorised build and threat review.</p>
+        </aside>
+      </div>
+    </section>
+
+    <div class="page-body">
+      <section class="intro-grid">
+        <p class="section-kicker">Current site boundary</p>
+        <div class="prose claim" data-claim="ENG-NOT-SHIPPED" data-status="current">
+          <h2>Nothing here holds a key or reaches the service.</h2>
+          <p class="big-copy">The published repository is plain HTML, CSS, one WebP and local Python checks. It contains no browser client, server process, environment-variable reader, network dependency, retry loop or runtime telemetry.</p>
+          <div class="claim-meta"><span class="status" data-status="current">Current</span><a class="source-chip" href="sources.html#src-TARGET">TARGET</a></div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-heading">
+          <p class="section-kicker">Before, during, after</p>
+          <h2>Three gates around one request.</h2>
+        </div>
+        <div class="card-grid">
+          <article class="card claim" data-claim="ENG-BEFORE" data-status="proposed">
+            <span class="card-index">Before</span>
+            <h3>Validate the packet</h3>
+            <p>Closed schema, allowed policy digest, fixed destination, size caps, Unicode normalisation, secret scan, redaction and canonical input digest.</p>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+          </article>
+          <article class="card claim" data-claim="ENG-DURING" data-status="proposed">
+            <span class="card-index">During</span>
+            <h3>Bound the call</h3>
+            <p>Server-side credential lookup, TLS verification, fixed host, one deadline, bounded response bytes and no content-bearing retry.</p>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+          </article>
+          <article class="card claim" data-claim="ENG-AFTER" data-status="proposed">
+            <span class="card-index">After</span>
+            <h3>Validate the result</h3>
+            <p>Expected status, closed result schema, accepted model id, finite numeric bounds, joined digests, deterministic route and recorded refusal.</p>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section-grid">
+        <p class="section-kicker">Published endpoint</p>
+        <div class="prose">
+          <h2>Pin the destination; do not accept a URL from the packet.</h2>
+          <p class="big-copy claim" data-claim="ENG-ENDPOINT" data-status="vendor-reported">Levanto's quickstart publishes <code>https://sage.levanto.ai</code> and requires authentication on every <code>/decide</code> call.</p>
+          <p class="big-copy claim" data-claim="ENG-ENDPOINT-CONTROL" data-status="proposed">A future adapter should fix that origin in reviewed configuration and never follow packet-supplied hosts, redirects or proxy settings.</p>
+          <div class="claim-meta"><span class="status" data-status="vendor-reported">Endpoint vendor-reported</span><a class="source-chip" href="sources.html#src-L-QUICK">L-QUICK</a><span class="status" data-status="proposed">Hardening proposed</span></div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-heading">
+          <p class="section-kicker">Closed records</p>
+          <h2>Store enough to explain the route without storing the packet twice.</h2>
+        </div>
+        <div class="claim" data-claim="ENG-RECORD" data-status="illustrative">
+          <span class="example-label">Illustrative and unexecuted</span>
+          <pre class="code-sample"><code>{
+  "schema": "sage-checkpoint-record/v1",
+  "packet": {
+    "id": "handoff-0042",
+    "sha256": "&lt;canonical packet digest&gt;",
+    "allowed_fields": ["summary", "requested_transition", "visible_gaps"]
+  },
+  "policy": {
+    "id": "needs-human-review/v1",
+    "sha256": "&lt;question and local route digest&gt;"
+  },
+  "response": {
+    "status": 200,
+    "model": "&lt;accepted model id&gt;",
+    "result_sha256": "&lt;validated response digest&gt;"
+  },
+  "route": {
+    "outcome": "review",
+    "consequence": 3,
+    "promise_machine_receipt": null
+  }
+}</code></pre>
+          <div class="claim-meta"><span class="status" data-status="illustrative">Illustrative</span></div>
+        </div>
+      </section>
+
+      <section class="section-grid">
+        <p class="section-kicker">Error map</p>
+        <div>
+          <div class="data-table-wrap claim" data-claim="ENG-ERRORS" data-status="proposed">
+            <table class="data-table">
+              <thead><tr><th>Input or response</th><th>Adapter result</th><th>Recovery left open</th></tr></thead>
+              <tbody>
+                <tr><td>Packet schema, policy or destination invalid</td><td>Refuse before egress.</td><td>Inspect the stable local finding and repair the packet or policy.</td></tr>
+                <tr><td>400 invalid request</td><td>Refuse; no retry.</td><td>Compare the exact request shape with the pinned schema.</td></tr>
+                <tr><td>401 missing or invalid key</td><td>Refuse; alert credential owner.</td><td>Rotate or restore the server-side credential outside packet handling.</td></tr>
+                <tr><td>402 insufficient balance</td><td>Refuse; no positive fallback.</td><td>Restore account capacity or keep the existing non-Sage route.</td></tr>
+                <tr><td>503, timeout or oversized body</td><td>Refuse the semantic route.</td><td>Record availability state and hand to inspection or human review.</td></tr>
+                <tr><td>Unknown field, model or invalid number</td><td>Refuse schema drift.</td><td>Review a new contract edition before accepting new bytes.</td></tr>
+              </tbody>
+            </table>
+            <div class="claim-meta"><span class="status" data-status="proposed">Routing proposed</span><a class="source-chip" href="sources.html#src-L-ERRORS">status meanings from L-ERRORS</a></div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-heading">
+          <p class="section-kicker">Signals without content</p>
+          <h2>Record the path, not the private payload.</h2>
+        </div>
+        <div class="card-grid">
+          <article class="card claim" data-claim="ENG-LOGGING" data-status="proposed">
+            <span class="card-index">Events</span><h3>One correlated lifecycle</h3>
+            <p>Packet accepted or refused, call started, response class, schema result, local route and Promise Machine result share one safe correlation id.</p>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+          </article>
+          <article class="card claim" data-claim="ENG-METRICS" data-status="proposed">
+            <span class="card-index">Metrics</span><h3>Bounded counts and time</h3>
+            <p>Count outcomes, failures, review load and separately scoped latency. Do not label vendor model time as end-to-end application time.</p>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+          </article>
+          <article class="card claim" data-claim="ENG-ALERTS" data-status="proposed">
+            <span class="card-index">Alerts</span><h3>Alert on felt failure</h3>
+            <p>Trigger on positive fall-through, unjoined records, drift refusals, sustained service loss and review backlog—not on one noisy model score.</p>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section-grid">
+        <p class="section-kicker">Proof before deployment</p>
+        <div>
+          <ul class="check-list claim" data-claim="ENG-PROOF" data-status="proposed">
+            <li>Valid, malformed, oversized and credential-bearing packet fixtures.</li>
+            <li>Every documented HTTP failure plus timeout, redirect and oversized response.</li>
+            <li>Unknown, missing, duplicated and non-finite response fields.</li>
+            <li>Policy and model drift with no permissive fallback.</li>
+            <li>Redaction and retention review against the exact data classes.</li>
+            <li>Differential replay proving the existing gate never becomes less strict.</li>
+          </ul>
+          <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+        </div>
+      </section>
+
+      <a class="next-link" href="sources.html">Inspect the evidence edition</a>
+    </div>
+  </main>
+  <footer class="site-footer"><div class="footer-shell"><p data-edition="cooperative-v1">Edition cooperative-v1 · engineering constraints, not deployed code</p><p><a href="sources.html">Source and claim record</a></p></div></footer>
+</body>
+</html>

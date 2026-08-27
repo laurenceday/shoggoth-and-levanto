@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A proposed advisory Sage checkpoint that preserves Shoggoth's Promise Machine authority.">
+  <meta name="theme-color" content="#071312">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Shoggoth + Levanto">
+  <meta property="og:title" content="Shoggoth + Levanto">
+  <meta property="og:description" content="A second opinion. Not a second authority.">
+  <meta property="og:url" content="https://laurenceday.github.io/shoggoth-and-levanto/architecture.html">
+  <meta property="og:image" content="https://laurenceday.github.io/shoggoth-and-levanto/assets/generated/social-preview.webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Shoggoth and Levanto meet at a cooperative threshold">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Shoggoth + Levanto">
+  <meta name="twitter:description" content="A second opinion. Not a second authority.">
+  <meta name="twitter:image" content="https://laurenceday.github.io/shoggoth-and-levanto/assets/generated/social-preview.webp">
+  <link rel="canonical" href="https://laurenceday.github.io/shoggoth-and-levanto/architecture.html">
+  <title>Architecture | Advice inside a deterministic boundary</title>
+  <link rel="stylesheet" href="assets/style.css?v=20260827-4">
+</head>
+<body data-page="architecture">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <nav class="nav-shell" aria-label="Primary">
+      <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span><span>Shoggoth + Levanto</span></a>
+      <div class="nav-links">
+        <a href="index.html">Overview</a><a href="sage.html">Sage</a><a href="shoggoth.html">Shoggoth</a><a href="handoffs.html">Hand-offs</a><a href="architecture.html" aria-current="page">Architecture</a><a href="policy.html">Policy</a><a href="pilot.html">Pilot</a><a href="limits.html">Limits</a><a href="engineering-primer.html">Engineering</a><a href="sources.html">Sources</a>
+      </div>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="hero-shell">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Proposed architecture</p>
+          <h1>Advice inside a <em>deterministic boundary.</em></h1>
+          <p class="lede claim" data-claim="ARCH-THESIS" data-status="proposed">The checkpoint treats Sage as one typed input to local policy. It binds the question and response to exact editions, then returns control to the rules that already govern the transition.</p>
+          <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+        </div>
+        <aside class="status-stack" aria-label="Page status">
+          <span class="status" data-status="proposed">Not implemented</span>
+          <p>No client, proxy, key, queue or decision store is shipped by this site.</p>
+        </aside>
+      </div>
+    </section>
+
+    <div class="page-body">
+      <aside class="boundary-callout claim" id="authority-boundary" data-claim="ARCH-AUTHORITY" data-status="proposed">
+        <strong>Protected authority boundary</strong>
+        <p>Sage may route, refuse or escalate; Sage alone does not authorise a Promise Machine transition.</p>
+        <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span><a class="source-chip" href="sources.html#src-SHOGGOTH">bounded by SHOGGOTH</a></div>
+      </aside>
+
+      <section>
+        <div class="section-heading">
+          <p class="section-kicker">Five stages</p>
+          <h2>The model sits in the middle, never at the end.</h2>
+        </div>
+        <div class="flow claim" data-claim="ARCH-FLOW" data-status="proposed">
+          <article class="flow-step"><span class="card-index">01 · Packet</span><h3>Bound the hand-off</h3><p>Name the actor, requested transition, consequence, policy edition, visible gaps and allowed content.</p></article>
+          <article class="flow-step local"><span class="card-index">02 · Local</span><h3>Validate and redact</h3><p>Reject secrets, unknown fields, excess size, missing digests and an unapproved destination before egress.</p></article>
+          <article class="flow-step sage"><span class="card-index">03 · Sage</span><h3>Ask one question</h3><p>Receive one typed result and metadata from the declared decision kind.</p></article>
+          <article class="flow-step local"><span class="card-index">04 · Local</span><h3>Apply route policy</h3><p>Validate the schema, model, status and policy, then choose route, review or refusal.</p></article>
+          <article class="flow-step authority"><span class="card-index">05 · Gate</span><h3>Check the promise</h3><p>Run the existing Promise Machine evidence check before any dependent transition.</p></article>
+        </div>
+        <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+      </section>
+
+      <section class="section-grid">
+        <p class="section-kicker">Before egress</p>
+        <div class="prose claim" data-claim="ARCH-PREPROCESS" data-status="proposed">
+          <h2>The safest API call is the one local code refuses to make.</h2>
+          <p class="big-copy">A future adapter accepts one closed packet schema. It canonicalises and digests the packet, checks an allowlisted policy and host, caps content and field counts, redacts declared private material and rejects credential-shaped values before any network request starts.</p>
+          <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-heading">
+          <p class="section-kicker">Bound records</p>
+          <h2>Four records make the crossing replayable.</h2>
+        </div>
+        <div class="card-grid">
+          <article class="card claim" data-claim="ARCH-INPUT-RECORD" data-status="proposed">
+            <span class="card-index">Input</span><h3>Packet record</h3>
+            <p>Packet id, canonical digest, allowed field names, size and the original Shoggoth transition request.</p>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+          </article>
+          <article class="card claim" data-claim="ARCH-POLICY-RECORD" data-status="proposed">
+            <span class="card-index">Policy</span><h3>Question record</h3>
+            <p>Policy id and digest, decision kind, exact instructions, threshold rule and permitted consequence range.</p>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+          </article>
+          <article class="card claim" data-claim="ARCH-RESPONSE-RECORD" data-status="proposed">
+            <span class="card-index">Response</span><h3>Sage record</h3>
+            <p>HTTP status, validated result, model id, reported latency, received time and a digest joined to the input.</p>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+          </article>
+          <article class="card claim" data-claim="ARCH-ROUTE-RECORD" data-status="proposed">
+            <span class="card-index">Route</span><h3>Local decision record</h3>
+            <p>Selected branch, rule version, reason, review state and the Promise Machine result that actually governed the transition.</p>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+          </article>
+          <article class="card claim" data-claim="ARCH-SOURCE-RECORD" data-status="proposed">
+            <span class="card-index">Edition</span><h3>Source record</h3>
+            <p>Shoggoth commit, Levanto contract digest and all policy dependencies needed to explain the decision later.</p>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+          </article>
+          <article class="card claim" data-claim="ARCH-GAP-RECORD" data-status="proposed">
+            <span class="card-index">Unknowns</span><h3>Gap record</h3>
+            <p>Missing facts, parse refusals, service failures and human-review outcomes remain visible rather than becoming a false negative.</p>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-heading">
+          <p class="section-kicker">Three local outcomes</p>
+          <h2>The adapter never returns “permission granted.”</h2>
+        </div>
+        <div class="route-grid">
+          <article class="route route claim" data-claim="ARCH-ROUTE" data-status="proposed">
+            <h3>Route</h3>
+            <p>A separately accepted policy may choose a low-consequence path after every local and Promise Machine gate passes.</p>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+          </article>
+          <article class="route review claim" data-claim="ARCH-REVIEW" data-status="proposed">
+            <h3>Review</h3>
+            <p>Ambiguous, sensitive or below-policy results pause the dependent path and preserve a human decision point.</p>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+          </article>
+          <article class="route refuse claim" data-claim="ARCH-REFUSE" data-status="proposed">
+            <h3>Refuse</h3>
+            <p>Invalid packets, schema drift, service errors and disallowed consequences stop the semantic route without deleting the source evidence.</p>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section-grid">
+        <p class="section-kicker">Evidence class</p>
+        <div class="prose">
+          <div class="claim" data-claim="ARCH-EVIDENCE" data-status="proposed">
+            <h2>A Sage record stays a Sage record.</h2>
+            <p class="big-copy">The response is recorded evidence that a named service returned a named result for a bound packet. It does not become checked, recomputed or proved evidence about the truth of that result unless a separate operation establishes that narrower claim.</p>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed composition rule</span><a class="source-chip" href="sources.html#src-SHOGGOTH">SHOGGOTH evidence law</a></div>
+          </div>
+        </div>
+      </section>
+
+      <a class="next-link" href="policy.html">Turn the boundary into policy</a>
+    </div>
+  </main>
+  <footer class="site-footer"><div class="footer-shell"><p data-edition="cooperative-v1">Edition cooperative-v1 · architecture proposal, not shipped adapter code</p><p><a href="sources.html">Source and claim record</a></p></div></footer>
+</body>
+</html>

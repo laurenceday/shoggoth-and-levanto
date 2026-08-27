@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A source-bound proposal for cooperative guardrails between Shoggoth and Levanto Sage.">
+  <meta name="theme-color" content="#071312">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Shoggoth + Levanto">
+  <meta property="og:title" content="Shoggoth + Levanto">
+  <meta property="og:description" content="A second opinion. Not a second authority.">
+  <meta property="og:url" content="https://laurenceday.github.io/shoggoth-and-levanto/">
+  <meta property="og:image" content="https://laurenceday.github.io/shoggoth-and-levanto/assets/generated/social-preview.webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Shoggoth and Levanto meet at a cooperative threshold">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Shoggoth + Levanto">
+  <meta name="twitter:description" content="A second opinion. Not a second authority.">
+  <meta name="twitter:image" content="https://laurenceday.github.io/shoggoth-and-levanto/assets/generated/social-preview.webp">
+  <link rel="canonical" href="https://laurenceday.github.io/shoggoth-and-levanto/">
+  <title>Shoggoth + Levanto | A second opinion, not a second authority</title>
+  <link rel="stylesheet" href="assets/style.css?v=20260827-4">
+</head>
+<body data-page="index">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <nav class="nav-shell" aria-label="Primary">
+      <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span><span>Shoggoth + Levanto</span></a>
+      <div class="nav-links">
+        <a href="index.html" aria-current="page">Overview</a>
+        <a href="sage.html">Sage</a>
+        <a href="shoggoth.html">Shoggoth</a>
+        <a href="handoffs.html">Hand-offs</a>
+        <a href="architecture.html">Architecture</a>
+        <a href="policy.html">Policy</a>
+        <a href="pilot.html">Pilot</a>
+        <a href="limits.html">Limits</a>
+        <a href="engineering-primer.html">Engineering</a>
+        <a href="sources.html">Sources</a>
+      </div>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="hero-shell">
+      <div class="hero-grid hero-with-art">
+        <div class="hero-copy">
+          <p class="eyebrow">A cooperative proposal</p>
+          <h1>A second opinion.<br><em>Not a second authority.</em></h1>
+          <p class="lede claim" data-claim="IDX-THESIS" data-status="proposed">Place Levanto's Sage beside selected Shoggoth hand-offs as a fast semantic checkpoint. Keep evidence, policy and final authority where they already belong: in deterministic local rules and the Promise Machine.</p>
+          <div class="claim-meta">
+            <span class="status" data-status="proposed">Proposed</span>
+            <a class="source-chip" href="sources.html#status-proposed">cooperative-v1</a>
+          </div>
+          <div class="hero-actions">
+            <a class="button-link" href="architecture.html">See the checkpoint</a>
+            <a class="button-link secondary" href="limits.html">Read the limits</a>
+          </div>
+        </div>
+        <figure class="hero-art">
+          <img src="assets/generated/cooperative-threshold.webp" width="1122" height="1402" alt="A lean geometric Wildcat joins blue and gold streams at a sunlit threshold">
+          <figcaption class="art-caption">Original generated artwork · the streams meet; their roles stay distinct</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <div class="page-body">
+      <section class="intro-grid">
+        <p class="section-kicker">The useful overlap</p>
+        <div class="prose">
+          <h2>One system reads the situation. The other governs what the reading may change.</h2>
+          <p class="big-copy claim" data-claim="IDX-SAGE" data-status="vendor-reported">Levanto describes Sage as an API for closed-ended decisions: send content and a question, receive a typed result and confidence that application code can branch on.</p>
+          <div class="claim-meta">
+            <span class="status" data-status="vendor-reported">Vendor-reported</span>
+            <a class="source-chip" href="sources.html#src-L-HOME">L-HOME</a>
+            <a class="source-chip" href="sources.html#src-L-QUICK">L-QUICK</a>
+          </div>
+          <p class="big-copy claim" data-claim="IDX-SHOGGOTH" data-status="current">Shoggoth's current Promise Machine binds a declared transition to named evidence, a consequence level, a refusal and a recovery path. Fiat then carries repository work through signed, receipted delivery gates.</p>
+          <div class="claim-meta">
+            <span class="status" data-status="current">Current</span>
+            <a class="source-chip" href="sources.html#src-SHOGGOTH">SHOGGOTH · 934c471</a>
+          </div>
+        </div>
+      </section>
+
+      <aside class="boundary-callout claim" data-claim="IDX-BOUNDARY" data-status="proposed">
+        <strong>Authority boundary</strong>
+        <p>Sage can add a route, refusal or escalation signal, but final transition authority remains with the Promise Machine.</p>
+        <div class="claim-meta">
+          <span class="status" data-status="proposed">Proposed</span>
+          <a class="source-chip" href="architecture.html#authority-boundary">ADR-002 boundary</a>
+        </div>
+      </aside>
+
+      <section class="section-grid">
+        <p class="section-kicker">Read both contracts</p>
+        <div>
+          <div class="comparison">
+            <article class="comparison-panel sage claim" data-claim="IDX-SAGE-ROLE" data-status="vendor-reported">
+              <span class="card-index">Sage</span>
+              <h3>Semantic decision signal</h3>
+              <ul>
+                <li>Answers a closed-ended question about supplied content.</li>
+                <li>Returns a typed result, model metadata and confidence.</li>
+                <li>Leaves the next action to application code.</li>
+              </ul>
+              <div class="claim-meta">
+                <span class="status" data-status="vendor-reported">Vendor-reported</span>
+                <a class="source-chip" href="sources.html#src-L-QUICK">L-QUICK</a>
+              </div>
+            </article>
+            <article class="comparison-panel claim" data-claim="IDX-SHOGGOTH-ROLE" data-status="current">
+              <span class="card-index">Shoggoth</span>
+              <h3>Evidence and delivery authority</h3>
+              <ul>
+                <li>Routes a request to one canonical skill boundary.</li>
+                <li>Preserves evidence classes, refusals and recovery.</li>
+                <li>Receipts consequential repository transitions.</li>
+              </ul>
+              <div class="claim-meta">
+                <span class="status" data-status="current">Current</span>
+                <a class="source-chip" href="sources.html#src-SHOGGOTH">SHOGGOTH</a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-heading">
+          <p class="section-kicker">The proposed join</p>
+          <h2>Let the model add friction before it earns any route.</h2>
+        </div>
+        <div class="card-grid">
+          <article class="card claim" data-claim="IDX-ENVELOPE" data-status="proposed">
+            <span class="card-index">01 · Bound</span>
+            <h3>Build a closed packet</h3>
+            <p>Local code selects only declared fields, caps their size, removes secrets and binds the policy edition.</p>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+          </article>
+          <article class="card claim" data-claim="IDX-ASK" data-status="proposed">
+            <span class="card-index">02 · Ask</span>
+            <h3>Ask one fixed question</h3>
+            <p>Sage returns a typed result. A strict adapter rejects malformed, unavailable or model-incompatible responses.</p>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+          </article>
+          <article class="card claim" data-claim="IDX-ROUTE" data-status="proposed">
+            <span class="card-index">03 · Govern</span>
+            <h3>Choose locally</h3>
+            <p>Deterministic policy may route, review or refuse. The original Promise Machine gate still decides whether the transition is allowed.</p>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section-grid">
+        <p class="section-kicker">What this edition is</p>
+        <div class="prose claim" data-claim="IDX-STATIC" data-status="current">
+          <h2>A research site, not a hidden connector.</h2>
+          <p class="big-copy">These pages ship no JavaScript, make no Sage request and contain no API key. Their examples are fixed, labelled and unexecuted. The live adapter remains a later decision with its own security, privacy and operations work.</p>
+          <div class="claim-meta">
+            <span class="status" data-status="current">Current</span>
+            <a class="source-chip" href="sources.html#src-TARGET">TARGET</a>
+          </div>
+        </div>
+      </section>
+
+      <a class="next-link" href="sage.html">Start with Sage's published contract</a>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-shell">
+      <p data-edition="cooperative-v1">Edition cooperative-v1 · observed 2026-08-27 · research and proposal</p>
+      <p><a href="sources.html">Source and claim record</a></p>
+    </div>
+  </footer>
+</body>
+</html>
