@@ -1,0 +1,84 @@
+{
+  "schema": "claim-registry-v1",
+  "edition": "cooperative-v1",
+  "statuses": [
+    "current",
+    "vendor-reported",
+    "inferred",
+    "proposed",
+    "illustrative",
+    "unknown"
+  ],
+  "claims": [
+    {
+      "id": "SHELL-INDEX",
+      "page": "index.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "A source-bound cooperative thesis will occupy this page."
+    },
+    {
+      "id": "SHELL-SAGE",
+      "page": "sage.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "A bounded account of the public Sage contract will occupy this page."
+    },
+    {
+      "id": "SHELL-SHOGGOTH",
+      "page": "shoggoth.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "A source-pinned Shoggoth profile will occupy this page."
+    },
+    {
+      "id": "SHELL-HANDOFFS",
+      "page": "handoffs.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "A map of bounded agent hand-offs will occupy this page."
+    },
+    {
+      "id": "SHELL-ARCHITECTURE",
+      "page": "architecture.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "A proposed advisory Sage checkpoint will occupy this page."
+    },
+    {
+      "id": "SHELL-POLICY",
+      "page": "policy.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "A policy and consequence map will occupy this page."
+    },
+    {
+      "id": "SHELL-PILOT",
+      "page": "pilot.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "An offline-first reversible pilot will occupy this page."
+    },
+    {
+      "id": "SHELL-LIMITS",
+      "page": "limits.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "The authority, privacy and service limits will occupy this page."
+    },
+    {
+      "id": "SHELL-ENGINEERING",
+      "page": "engineering-primer.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "A future-adapter engineering boundary will occupy this page."
+    },
+    {
+      "id": "SHELL-SOURCES",
+      "page": "sources.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "The human-readable source edition will occupy this page."
+    }
+  ]
+}

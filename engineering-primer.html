@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Engineering boundaries for any later live Sage adapter.">
+  <meta name="theme-color" content="#071312">
+  <title>Engineering | Shoggoth + Levanto</title>
+  <link rel="stylesheet" href="assets/style.css?v=20260827">
+</head>
+<body data-page="engineering-primer">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header"><nav class="nav-shell" aria-label="Primary"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span><span>Shoggoth + Levanto</span></a><div class="nav-links"><a href="index.html">Overview</a><a href="sage.html">Sage</a><a href="shoggoth.html">Shoggoth</a><a href="handoffs.html">Hand-offs</a><a href="architecture.html">Architecture</a><a href="policy.html">Policy</a><a href="pilot.html">Pilot</a><a href="limits.html">Limits</a><a href="engineering-primer.html" aria-current="page">Engineering</a><a href="sources.html">Sources</a></div></nav></header>
+  <main id="main">
+    <section class="hero-shell"><div class="hero-grid"><div class="hero-copy"><p class="eyebrow">Implementation boundary</p><h1>If this becomes live, the boundary becomes the product.</h1><p class="lede" data-claim="SHELL-ENGINEERING" data-status="proposed">This page will preserve server-side key handling, fixed destinations, closed schemas, redaction, size and time caps, digest binding, deterministic routing and fail-closed recovery.</p></div><aside class="status-stack" aria-label="Page status"><span class="status" data-status="proposed">Primer scaffold</span><p>It is a design constraint, not shipped adapter code.</p></aside></div></section>
+    <div class="page-body">
+      <div class="intro-grid"><p class="section-kicker">What belongs here</p><div class="prose"><h2>Make every crossing explicit and every result replayable.</h2><p>The completed primer will name the packet, policy, response and route records needed for a separate implementation without putting credentials or real data in this static site.</p></div></div>
+      <div class="card-grid"><article class="card"><span class="card-index">01</span><h3>Before the call</h3><p>Validate, cap, redact and digest a closed packet.</p></article><article class="card"><span class="card-index">02</span><h3>After the call</h3><p>Validate response status, type, model and metadata.</p></article><article class="card"><span class="card-index">03</span><h3>Before the route</h3><p>Apply deterministic policy and preserve the evidence boundary.</p></article></div>
+      <a class="next-link" href="sources.html">Inspect the source edition</a>
+    </div>
+  </main>
+  <footer class="site-footer"><div class="footer-shell"><p data-edition="cooperative-v1">Edition cooperative-v1 · Research and proposal</p><p><a href="sources.html">Source record</a></p></div></footer>
+</body>
+</html>
