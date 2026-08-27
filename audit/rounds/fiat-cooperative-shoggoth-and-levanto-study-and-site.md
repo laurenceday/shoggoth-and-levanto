@@ -33,3 +33,19 @@ Elenchus verdict: guarded
 | S1-R2-01 | medium | scripts/check_site.py | JSON objects with duplicate keys were accepted with last-value-wins parsing, so source, claim or budget bytes could hide an overridden field. | fixed in this round |
 
 Leads not pursued: none
+
+## Step 1, round 3 -- 2026-08-27T17:38:23Z
+
+Audit schema: fiat-audit-round/v2
+
+Covered: authority-inversion=reviewed; status-collapse=reviewed; policy-drift=not-applicable; confidence-misread=reviewed; service-failure=not-applicable; schema-drift=not-applicable; credential-leak=reviewed; content-egress=reviewed; diagnostic-retention=not-applicable; prompt-injection=reviewed; source-drift=reviewed; skill-surface-divergence=reviewed; benchmark-overclaim=reviewed; endorsement-drift=reviewed; source-copying=reviewed; image-provenance=not-applicable; image-cache-layout=not-applicable; link-integrity=reviewed; page-accessibility=reviewed; asset-budget=reviewed; pages-publication=not-applicable; pages-cache=not-applicable; test-runner-contract=reviewed; hidden-runtime=reviewed
+
+Not checked: browser-rendered contrast, keyboard, narrow-screen and print behaviour; live Pages publication and cache behaviour; future Sage adapter network, schema and data handling; Step 2 generated-image bytes and provenance
+
+Elenchus verdict: null
+
+| id | severity | file | finding | status |
+| --- | --- | --- | --- | --- |
+| -- | -- | -- | none | -- |
+
+Leads not pursued: none
