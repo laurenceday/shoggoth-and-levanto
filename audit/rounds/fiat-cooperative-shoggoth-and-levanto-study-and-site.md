@@ -119,3 +119,37 @@ Elenchus verdict: guarded
 | S3-R1-03 | low | scripts/public_smoke.py | An output unlink or write failure escaped the bounded refusal path and could emit a traceback containing a private local path. | fixed in this round |
 
 Leads not pursued: none
+
+## Step 3, round 2 -- 2026-08-27T18:37:32Z
+
+Audit schema: fiat-audit-round/v2
+
+Covered: authority-inversion=reviewed; status-collapse=reviewed; policy-drift=reviewed; confidence-misread=reviewed; service-failure=reviewed; schema-drift=reviewed; credential-leak=reviewed; content-egress=reviewed; diagnostic-retention=reviewed; prompt-injection=reviewed; source-drift=reviewed; skill-surface-divergence=reviewed; benchmark-overclaim=reviewed; endorsement-drift=reviewed; source-copying=reviewed; image-provenance=reviewed; image-cache-layout=reviewed; link-integrity=reviewed; page-accessibility=reviewed; asset-budget=reviewed; pages-publication=reviewed; pages-cache=reviewed; test-runner-contract=reviewed; hidden-runtime=reviewed
+
+Not checked: the live Pages build and cache response, which remain reserved for the integration receipt; any future Sage adapter's live network, schema and data handling
+
+Elenchus verdict: guarded
+
+| id | severity | file | finding | status |
+| --- | --- | --- | --- | --- |
+| S3-R2-01 | medium | scripts/public_smoke.py; README.md | A complete readback could omit the integrated GitHub commit, so the body digests were not joined to the merge whose Pages build was being checked. | fixed in this round |
+| S3-R2-02 | medium | scripts/public_smoke.py | Freshness depended on output-file mtime alone; touching an old, otherwise valid document during a new run could satisfy that check while its embedded observation time remained stale. | fixed in this round |
+| S3-R2-03 | low | scripts/public_smoke.py | A failed readback discarded every successful target checked before the failure, leaving the failed target but not the preceding HTTP evidence needed to localise publication drift. | fixed in this round |
+
+Leads not pursued: none
+
+## Step 3, round 3 -- 2026-08-27T18:38:06Z
+
+Audit schema: fiat-audit-round/v2
+
+Covered: authority-inversion=reviewed; status-collapse=reviewed; policy-drift=reviewed; confidence-misread=reviewed; service-failure=reviewed; schema-drift=reviewed; credential-leak=reviewed; content-egress=reviewed; diagnostic-retention=reviewed; prompt-injection=reviewed; source-drift=reviewed; skill-surface-divergence=reviewed; benchmark-overclaim=reviewed; endorsement-drift=reviewed; source-copying=reviewed; image-provenance=reviewed; image-cache-layout=reviewed; link-integrity=reviewed; page-accessibility=reviewed; asset-budget=reviewed; pages-publication=reviewed; pages-cache=reviewed; test-runner-contract=reviewed; hidden-runtime=reviewed
+
+Not checked: the live Pages build and cache response, which remain reserved for the integration receipt; any future Sage adapter's live network, schema and data handling
+
+Elenchus verdict: null
+
+| id | severity | file | finding | status |
+| --- | --- | --- | --- | --- |
+| -- | -- | -- | none | -- |
+
+Leads not pursued: none
