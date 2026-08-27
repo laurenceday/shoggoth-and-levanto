@@ -1,0 +1,977 @@
+{
+  "schema": "claim-registry-v1",
+  "edition": "cooperative-v1",
+  "statuses": [
+    "current",
+    "vendor-reported",
+    "inferred",
+    "proposed",
+    "illustrative",
+    "unknown"
+  ],
+  "claims": [
+    {
+      "id": "IDX-THESIS",
+      "page": "index.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "Place Levanto's Sage beside selected Shoggoth hand-offs as a fast semantic checkpoint. Keep evidence, policy and final authority where they already belong: in deterministic local rules and the Promise Machine."
+    },
+    {
+      "id": "IDX-SAGE",
+      "page": "index.html",
+      "status": "vendor-reported",
+      "source_ids": [
+        "L-HOME",
+        "L-QUICK"
+      ],
+      "summary": "Levanto describes Sage as an API for closed-ended decisions: send content and a question, receive a typed result and confidence that application code can branch on."
+    },
+    {
+      "id": "IDX-SHOGGOTH",
+      "page": "index.html",
+      "status": "current",
+      "source_ids": [
+        "SHOGGOTH"
+      ],
+      "summary": "Shoggoth's current Promise Machine binds a declared transition to named evidence, a consequence level, a refusal and a recovery path. Fiat then carries repository work through signed, receipted delivery gates."
+    },
+    {
+      "id": "IDX-BOUNDARY",
+      "page": "index.html",
+      "status": "proposed",
+      "source_ids": [
+        "SHOGGOTH"
+      ],
+      "summary": "Sage can add a route, refusal or escalation signal, but final transition authority remains with the Promise Machine."
+    },
+    {
+      "id": "IDX-SAGE-ROLE",
+      "page": "index.html",
+      "status": "vendor-reported",
+      "source_ids": [
+        "L-HOME",
+        "L-QUICK"
+      ],
+      "summary": "Sage Semantic decision signal Answers a closed-ended question about supplied content. Returns a typed result, model metadata and confidence. Leaves the next action to application code. Vendor-reported L-QUICK"
+    },
+    {
+      "id": "IDX-SHOGGOTH-ROLE",
+      "page": "index.html",
+      "status": "current",
+      "source_ids": [
+        "SHOGGOTH"
+      ],
+      "summary": "Shoggoth Evidence and delivery authority Routes a request to one canonical skill boundary. Preserves evidence classes, refusals and recovery. Receipts consequential repository transitions. Current SHOGGOTH"
+    },
+    {
+      "id": "IDX-ENVELOPE",
+      "page": "index.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "01 · Bound Build a closed packet Local code selects only declared fields, caps their size, removes secrets and binds the policy edition. Proposed"
+    },
+    {
+      "id": "IDX-ASK",
+      "page": "index.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "02 · Ask Ask one fixed question Sage returns a typed result. A strict adapter rejects malformed, unavailable or model-incompatible responses. Proposed"
+    },
+    {
+      "id": "IDX-ROUTE",
+      "page": "index.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "03 · Govern Choose locally Deterministic policy may route, review or refuse. The original Promise Machine gate still decides whether the transition is allowed. Proposed"
+    },
+    {
+      "id": "IDX-STATIC",
+      "page": "index.html",
+      "status": "current",
+      "source_ids": [
+        "TARGET"
+      ],
+      "summary": "A research site, not a hidden connector. These pages ship no JavaScript, make no Sage request and contain no API key. Their examples are fixed, labelled and unexecuted. The live adapter remains a later decision with its own security, pri..."
+    },
+    {
+      "id": "SAGE-PURPOSE",
+      "page": "sage.html",
+      "status": "vendor-reported",
+      "source_ids": [
+        "L-HOME",
+        "L-QUICK"
+      ],
+      "summary": "Levanto presents Sage as a model for closed-ended questions rather than prose generation: send content and a declared question kind, then receive a structured result with confidence."
+    },
+    {
+      "id": "SAGE-ENDPOINTS",
+      "page": "sage.html",
+      "status": "vendor-reported",
+      "source_ids": [
+        "L-QUICK",
+        "L-OPENAPI"
+      ],
+      "summary": "A small HTTP surface with an explicit caller. The quickstart lists unauthenticated GET /ready , authenticated POST /decide and authenticated POST /decide/batch . The OpenAPI edition also describes model and usage-estimate routes. Every d..."
+    },
+    {
+      "id": "SAGE-YESNO",
+      "page": "sage.html",
+      "status": "vendor-reported",
+      "source_ids": [
+        "L-KINDS"
+      ],
+      "summary": "yesno Binary call Returns a Yes probability, a Yes/No answer and decisiveness away from a tie. Vendor-reported L-KINDS"
+    },
+    {
+      "id": "SAGE-CHOICE",
+      "page": "sage.html",
+      "status": "vendor-reported",
+      "source_ids": [
+        "L-KINDS"
+      ],
+      "summary": "choice One option Chooses an argmax from a caller-defined set and returns per-option probabilities that need not sum to one. Vendor-reported L-KINDS"
+    },
+    {
+      "id": "SAGE-SCALE",
+      "page": "sage.html",
+      "status": "vendor-reported",
+      "source_ids": [
+        "L-KINDS"
+      ],
+      "summary": "scale Five-level rubric Uses exactly five caller-described levels, zero through four, and returns an expected level plus confidence. Vendor-reported L-KINDS"
+    },
+    {
+      "id": "SAGE-SORT",
+      "page": "sage.html",
+      "status": "vendor-reported",
+      "source_ids": [
+        "L-KINDS"
+      ],
+      "summary": "sort Ordered list Ranks a list by the written criterion and returns one list-level confidence for the order. Vendor-reported L-KINDS"
+    },
+    {
+      "id": "SAGE-TAGS",
+      "page": "sage.html",
+      "status": "vendor-reported",
+      "source_ids": [
+        "L-KINDS"
+      ],
+      "summary": "tags Zero or more labels Applies any matching labels from a caller-defined set, with confidence attached to returned tags. Vendor-reported L-KINDS"
+    },
+    {
+      "id": "SAGE-BATCH",
+      "page": "sage.html",
+      "status": "vendor-reported",
+      "source_ids": [
+        "L-BATCH"
+      ],
+      "summary": "batch Several decisions The batch route accepts several decision requests and can expose item-level outcomes rather than turning one item into a claim about all. Vendor-reported L-BATCH"
+    },
+    {
+      "id": "SAGE-CONFIDENCE",
+      "page": "sage.html",
+      "status": "vendor-reported",
+      "source_ids": [
+        "L-KINDS",
+        "L-ERRORS"
+      ],
+      "summary": "Decisive is not the same as correct. For Yes/No, the published confidence is distance from a 50/50 tie. Sage returns a decision signal on success and does not abstain. Levanto leaves automation, review and escalation thresholds to the ap..."
+    },
+    {
+      "id": "SAGE-THRESHOLD-UNKNOWN",
+      "page": "sage.html",
+      "status": "unknown",
+      "source_ids": [],
+      "summary": "No universal threshold is established here. A confidence number does not supply calibration for Shoggoth packets, a false-refusal cost or a safe consequence level. Those remain unknown until a bounded pilot measures them. Unknown"
+    },
+    {
+      "id": "SAGE-EXAMPLE",
+      "page": "sage.html",
+      "status": "illustrative",
+      "source_ids": [
+        "L-QUICK"
+      ],
+      "summary": "Illustrative and unexecuted { \"content\": \"Proposed hand-off asks to publish a repository change.\", \"question\": { \"id\": \"needs_human_review\", \"kind\": \"yesno\", \"instructions\": \"Does this packet require human review before publication?\" } }..."
+    },
+    {
+      "id": "SAGE-ERRORS",
+      "page": "sage.html",
+      "status": "vendor-reported",
+      "source_ids": [
+        "L-ERRORS"
+      ],
+      "summary": "400 · 401 · 402 · 503 Published errors distinguish invalid input, missing or invalid authentication, insufficient balance and a loading or unavailable service. Vendor-reported L-ERRORS"
+    },
+    {
+      "id": "SAGE-RETENTION",
+      "page": "sage.html",
+      "status": "vendor-reported",
+      "source_ids": [
+        "L-PRIVACY"
+      ],
+      "summary": "Ordinary zero retention; diagnostic exception Levanto's policy says ordinary inference inputs and outputs are not retained, while failed or abnormally slow requests may retain full redacted payloads for 30 days. Vendor-reported L-PRIVACY"
+    },
+    {
+      "id": "SAGE-RESPONSIBILITY",
+      "page": "sage.html",
+      "status": "vendor-reported",
+      "source_ids": [
+        "L-TERMS"
+      ],
+      "summary": "Probabilistic output Levanto's terms say outputs may be wrong, incomplete, biased or unsuitable, and place evaluation, oversight and downstream action on the customer. Vendor-reported L-TERMS"
+    },
+    {
+      "id": "SAGE-READY",
+      "page": "sage.html",
+      "status": "current",
+      "source_ids": [
+        "L-READY"
+      ],
+      "summary": "One readiness observation The unauthenticated readiness route answered HTTP 200 with an empty body at 17:03:45Z on 2026-08-27. That is not an uptime, latency or quality result. Current observation L-READY"
+    },
+    {
+      "id": "SHOG-PROMISE",
+      "page": "shoggoth.html",
+      "status": "current",
+      "source_ids": [
+        "SHOGGOTH"
+      ],
+      "summary": "The Promise Machine's root law is simple: no skill may claim more than its evidence establishes or authorise a more consequential transition than that evidence warrants."
+    },
+    {
+      "id": "SHOG-ROUTER",
+      "page": "shoggoth.html",
+      "status": "current",
+      "source_ids": [
+        "SHOGGOTH"
+      ],
+      "summary": "One request, one canonical owner. The portable Promise Machine router selects the one canonical skill whose contract owns a request. Sibling hand-offs stay named rather than letting one skill quietly broaden into another's work. Current..."
+    },
+    {
+      "id": "SHOG-PROMISE-SHAPE",
+      "page": "shoggoth.html",
+      "status": "current",
+      "source_ids": [
+        "SHOGGOTH"
+      ],
+      "summary": "Promise Say exactly what passed Each operation names its promise, evidence, evidence class and the nearest conclusion it does not support. Current SHOGGOTH"
+    },
+    {
+      "id": "SHOG-REFUSAL",
+      "page": "shoggoth.html",
+      "status": "current",
+      "source_ids": [
+        "SHOGGOTH"
+      ],
+      "summary": "Refusal Stop only the dependent step Missing, stale or mismatched evidence blocks the transition that needs it while inspection, repair and safe exit remain available. Current SHOGGOTH"
+    },
+    {
+      "id": "SHOG-COMPOSITION",
+      "page": "shoggoth.html",
+      "status": "current",
+      "source_ids": [
+        "SHOGGOTH"
+      ],
+      "summary": "Composition Do not strengthen the hand-off A consumer may narrow evidence or add its own, but cannot rename a model judgment, recording or check into a stronger class. Current SHOGGOTH"
+    },
+    {
+      "id": "SHOG-CONSEQUENCES",
+      "page": "shoggoth.html",
+      "status": "current",
+      "source_ids": [
+        "SHOGGOTH"
+      ],
+      "summary": "Level Transition Minimum enforcement 0 Response or presentation Preserve scope, content and uncertainty. 1 Derived artefact Validate structure, provenance and visible gaps. 2 Repository or durable-data mutation Require tests, negative ev..."
+    },
+    {
+      "id": "SHOG-FIAT",
+      "page": "shoggoth.html",
+      "status": "current",
+      "source_ids": [
+        "SHOGGOTH"
+      ],
+      "summary": "01 Surveyor Reads the target and public sources, then fixes assumptions, options, risks and proof. 02 Protasis Holds the study and runbook to testable criteria before implementation begins. 03 Mason Builds one bounded runbook step on the..."
+    },
+    {
+      "id": "SHOG-AUTHORITY",
+      "page": "shoggoth.html",
+      "status": "current",
+      "source_ids": [
+        "SHOGGOTH"
+      ],
+      "summary": "What a model result cannot do A probabilistic answer cannot become a receipt, a proof or a passing evidence gate merely by being useful. Current boundary SHOGGOTH"
+    },
+    {
+      "id": "SHOG-NO-SAGE",
+      "page": "shoggoth.html",
+      "status": "inferred",
+      "source_ids": [
+        "SHOGGOTH"
+      ],
+      "summary": "No hidden integration to document. The pinned Skills tree contains no Sage or Levanto surface. Any checkpoint on the following pages is new proposed architecture, not a missing chapter of the current system. Inferred from searched source..."
+    },
+    {
+      "id": "HANDOFF-THESIS",
+      "page": "handoffs.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "A Sage checkpoint is most legible between a bounded packet and a consequential next step—not inside a skill's evidence check and not after the action has already happened."
+    },
+    {
+      "id": "HANDOFF-CURRENT",
+      "page": "handoffs.html",
+      "status": "current",
+      "source_ids": [
+        "SHOGGOTH"
+      ],
+      "summary": "A hand-off carries less than the whole conversation. Fiat workers receive source-bound briefs for one role and one phase. The packet names the branch, runbook step, evidence boundary and exact output owed; the controller keeps the durabl..."
+    },
+    {
+      "id": "HANDOFF-CHAIN",
+      "page": "handoffs.html",
+      "status": "current",
+      "source_ids": [
+        "SHOGGOTH"
+      ],
+      "summary": "Study Surveyor → Protasis Assumptions, sources, options, risks and proof cross into a content-contract review. Build Protasis → Mason One discrete green-to-green step crosses into implementation. Review Mason → Warden The exact signed tr..."
+    },
+    {
+      "id": "HANDOFF-SOURCE-TRIAGE",
+      "page": "handoffs.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "01 · Research Does this source need human review? Sage may flag a public document or mutable vendor claim for extra review. It cannot promote that material into a stronger evidence class. Proposed"
+    },
+    {
+      "id": "HANDOFF-AUDIT-TRIAGE",
+      "page": "handoffs.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "02 · Audit Which finding deserves attention first? Sage may sort or tag already-recorded findings for a reviewer. It cannot lower severity, close a finding or replace the clean-round rule. Proposed"
+    },
+    {
+      "id": "HANDOFF-PUBLISH-BRAKE",
+      "page": "handoffs.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "03 · Publication Should this packet pause? In the first pilot, Sage may request review or refusal before publication. It cannot remove a deterministic gate or permit the merge. Proposed"
+    },
+    {
+      "id": "HANDOFF-BRAKE",
+      "page": "handoffs.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "First-pilot asymmetry Sage may add friction. It may not take friction away. Proposed pilot design"
+    },
+    {
+      "id": "HANDOFF-PACKET",
+      "page": "handoffs.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "Field Why it crosses What stays out packet_id + digest Join the result to the exact bounded input. Raw conversation history. policy_id + digest Fix the question, threshold and consequence rule. Mutable free-form policy. question + allowe..."
+    },
+    {
+      "id": "HANDOFF-NEVER",
+      "page": "handoffs.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "No secret, no full context dump, no implied permission. A future adapter refuses packets with undeclared fields, credentials, private filesystem paths, oversized content, missing policy digests or a destination outside its allowlist. Ref..."
+    },
+    {
+      "id": "ARCH-THESIS",
+      "page": "architecture.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "The checkpoint treats Sage as one typed input to local policy. It binds the question and response to exact editions, then returns control to the rules that already govern the transition."
+    },
+    {
+      "id": "ARCH-AUTHORITY",
+      "page": "architecture.html",
+      "status": "proposed",
+      "source_ids": [
+        "SHOGGOTH"
+      ],
+      "summary": "Protected authority boundary Sage may route, refuse or escalate; Sage alone does not authorise a Promise Machine transition. Proposed bounded by SHOGGOTH"
+    },
+    {
+      "id": "ARCH-FLOW",
+      "page": "architecture.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "01 · Packet Bound the hand-off Name the actor, requested transition, consequence, policy edition, visible gaps and allowed content. 02 · Local Validate and redact Reject secrets, unknown fields, excess size, missing digests and an unappr..."
+    },
+    {
+      "id": "ARCH-PREPROCESS",
+      "page": "architecture.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "The safest API call is the one local code refuses to make. A future adapter accepts one closed packet schema. It canonicalises and digests the packet, checks an allowlisted policy and host, caps content and field counts, redacts declared..."
+    },
+    {
+      "id": "ARCH-INPUT-RECORD",
+      "page": "architecture.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "Input Packet record Packet id, canonical digest, allowed field names, size and the original Shoggoth transition request. Proposed"
+    },
+    {
+      "id": "ARCH-POLICY-RECORD",
+      "page": "architecture.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "Policy Question record Policy id and digest, decision kind, exact instructions, threshold rule and permitted consequence range. Proposed"
+    },
+    {
+      "id": "ARCH-RESPONSE-RECORD",
+      "page": "architecture.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "Response Sage record HTTP status, validated result, model id, reported latency, received time and a digest joined to the input. Proposed"
+    },
+    {
+      "id": "ARCH-ROUTE-RECORD",
+      "page": "architecture.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "Route Local decision record Selected branch, rule version, reason, review state and the Promise Machine result that actually governed the transition. Proposed"
+    },
+    {
+      "id": "ARCH-SOURCE-RECORD",
+      "page": "architecture.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "Edition Source record Shoggoth commit, Levanto contract digest and all policy dependencies needed to explain the decision later. Proposed"
+    },
+    {
+      "id": "ARCH-GAP-RECORD",
+      "page": "architecture.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "Unknowns Gap record Missing facts, parse refusals, service failures and human-review outcomes remain visible rather than becoming a false negative. Proposed"
+    },
+    {
+      "id": "ARCH-ROUTE",
+      "page": "architecture.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "Route A separately accepted policy may choose a low-consequence path after every local and Promise Machine gate passes. Proposed"
+    },
+    {
+      "id": "ARCH-REVIEW",
+      "page": "architecture.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "Review Ambiguous, sensitive or below-policy results pause the dependent path and preserve a human decision point. Proposed"
+    },
+    {
+      "id": "ARCH-REFUSE",
+      "page": "architecture.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "Refuse Invalid packets, schema drift, service errors and disallowed consequences stop the semantic route without deleting the source evidence. Proposed"
+    },
+    {
+      "id": "ARCH-EVIDENCE",
+      "page": "architecture.html",
+      "status": "proposed",
+      "source_ids": [
+        "SHOGGOTH"
+      ],
+      "summary": "A Sage record stays a Sage record. The response is recorded evidence that a named service returned a named result for a bound packet. It does not become checked, recomputed or proved evidence about the truth of that result unless a separ..."
+    },
+    {
+      "id": "POLICY-THESIS",
+      "page": "policy.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "A policy edition fixes the question, decision kind, allowed input, response checks, consequence range and route rule before Sage sees a packet."
+    },
+    {
+      "id": "POLICY-SPLIT",
+      "page": "policy.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "Keep the semantic question separate from the consequence rule. The Sage question asks what the content appears to mean. Local policy asks whether that result is usable here, at this confidence, for this consequence, under this source edi..."
+    },
+    {
+      "id": "POLICY-KINDS",
+      "page": "policy.html",
+      "status": "vendor-reported",
+      "source_ids": [
+        "L-KINDS"
+      ],
+      "summary": "Published answer shapes: Yes/No returns probability, answer and decisiveness; Choice returns a chosen option and per-option probabilities; Scale returns an expected level on a fixed 0–4 rubric; Sort returns ordered ids and list-level confidence; Tags returns zero or more labels with confidence."
+    },
+    {
+      "id": "POLICY-KINDS-USES",
+      "page": "policy.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "Possible Shoggoth uses: ask about human review, specialist queues, sensitivity, finding order or declared risk labels, with first-pilot effects limited to review support."
+    },
+    {
+      "id": "POLICY-ID",
+      "page": "policy.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "01 Stable id and digest The packet names an accepted policy edition; it cannot send new policy prose and call it approved. Proposed"
+    },
+    {
+      "id": "POLICY-QUESTION",
+      "page": "policy.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "02 Closed question The decision kind, instructions and option or rubric definitions are fixed and reviewable. Proposed"
+    },
+    {
+      "id": "POLICY-ALLOWLIST",
+      "page": "policy.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "03 Allowed fields Only declared, redacted content classes may leave the process; every other field is refused. Proposed"
+    },
+    {
+      "id": "POLICY-RESPONSE",
+      "page": "policy.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "04 Response contract The accepted model, schema, status codes and metadata fields are closed rather than best-effort parsed. Proposed"
+    },
+    {
+      "id": "POLICY-ROUTE",
+      "page": "policy.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "05 Route rule Threshold bands map to review, refusal or an explicitly low-consequence route in deterministic code. Proposed"
+    },
+    {
+      "id": "POLICY-EXPIRY",
+      "page": "policy.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "06 Expiry and recovery Source drift, model drift or a failed check expires the policy and leaves replay and human review available. Proposed"
+    },
+    {
+      "id": "POLICY-CONSEQUENCE",
+      "page": "policy.html",
+      "status": "proposed",
+      "source_ids": [
+        "SHOGGOTH"
+      ],
+      "summary": "Consequence rule For levels 2 and 3, a Sage answer can brake. It cannot independently permit. Proposed SHOGGOTH consequence levels"
+    },
+    {
+      "id": "POLICY-EXAMPLE",
+      "page": "policy.html",
+      "status": "illustrative",
+      "source_ids": [],
+      "summary": "Illustrative and unexecuted policy needs_human_review/v1 kind: yesno allowed_consequence: [0, 1, 2, 3] if response.status != 200: refuse semantic route if response.model not in accepted: refuse semantic route if response.result.answer ==..."
+    },
+    {
+      "id": "POLICY-THRESHOLD",
+      "page": "policy.html",
+      "status": "unknown",
+      "source_ids": [],
+      "summary": "Pick no number before measuring the errors. This study does not know a safe universal confidence band. The pilot must record disagreement, false review, false refusal, service failure and consequence before a threshold can be accepted fo..."
+    },
+    {
+      "id": "PILOT-THESIS",
+      "page": "pilot.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "The first pilot earns evidence about one fixed policy question before it gains any effect. Its first live effect can only add review or refusal."
+    },
+    {
+      "id": "PILOT-QUESTION",
+      "page": "pilot.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "“Does this already-bounded packet need human review?” Start with a Yes/No review question over synthetic or specifically approved packets. Do not start with permission to publish, deploy, execute a tool or make a security or financial co..."
+    },
+    {
+      "id": "PILOT-REPLAY",
+      "page": "pilot.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "1 Offline replay Run a versioned fixture set without consequence. Record Sage's result, the existing deterministic route and an independent human label against the same packet digest. Proposed"
+    },
+    {
+      "id": "PILOT-SHADOW",
+      "page": "pilot.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "2 Live shadow Send only separately approved, allowlisted packet fields. Record what Sage would have requested, but let the existing path continue unchanged. Proposed"
+    },
+    {
+      "id": "PILOT-BRAKE",
+      "page": "pilot.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "3 Braking authority Permit one policy edition to add review or refusal. Keep every positive route, evidence gate and consequence check exactly as before. Proposed"
+    },
+    {
+      "id": "PILOT-FIXTURE",
+      "page": "pilot.html",
+      "status": "illustrative",
+      "source_ids": [],
+      "summary": "Illustrative and unexecuted { \"fixture_id\": \"publication-review-0042\", \"packet_digest\": \"sha256:<fixture bytes>\", \"policy_digest\": \"sha256:<question + route rule>\", \"expected_human_label\": \"review\", \"sage_result\": { \"answer\": \"yes\", \"con..."
+    },
+    {
+      "id": "PILOT-MEASURE-DISAGREEMENT",
+      "page": "pilot.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "Decision Agreement by packet class Compare Sage, deterministic policy and independent human labels. Keep false review and false refusal separate. Proposed"
+    },
+    {
+      "id": "PILOT-MEASURE-CONFIDENCE",
+      "page": "pilot.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "Calibration Error by confidence band Measure whether higher confidence predicts agreement for this exact question and distribution; assume no transfer to another policy. Proposed"
+    },
+    {
+      "id": "PILOT-MEASURE-OPS",
+      "page": "pilot.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "Operations Failure and review load Record latency scope, timeouts, 400/401/402/503 responses, payload refusals, review queue size and time to recovery. Proposed"
+    },
+    {
+      "id": "PILOT-ASYMMETRY",
+      "page": "pilot.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "Non-negotiable first-live rule The pilot can stop more work than before. It cannot permit more work than before. Proposed"
+    },
+    {
+      "id": "PILOT-STOPS",
+      "page": "pilot.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "Any credential, private path or undeclared field reaches a request candidate. The response schema or accepted model edition changes without policy review. A service failure falls through to a positive route. False refusals exceed the acc..."
+    },
+    {
+      "id": "PILOT-NOT-RUN",
+      "page": "pilot.html",
+      "status": "current",
+      "source_ids": [
+        "TARGET"
+      ],
+      "summary": "No pilot evidence is smuggled into the proposal. The repository is a static explanation and test harness for its own claims and assets. It sends no packet, stores no decision and establishes no calibration, latency or suitability result...."
+    },
+    {
+      "id": "LIMITS-THESIS",
+      "page": "limits.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "A clean typed response can still be wrong evidence, the wrong edition, too sensitive to send, too expensive to call or too consequential to route."
+    },
+    {
+      "id": "LIMIT-AUTHORITY",
+      "page": "limits.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "Authority inversion A useful semantic answer is mistaken for proof that a Promise Machine gate passed. Control: preserve separate evidence classes and never return permission from the adapter. Proposed control"
+    },
+    {
+      "id": "LIMIT-CONFIDENCE",
+      "page": "limits.html",
+      "status": "vendor-reported",
+      "source_ids": [
+        "L-KINDS"
+      ],
+      "summary": "Yes/No confidence is published as decisiveness away from a tie, not correctness for Shoggoth's packet distribution."
+    },
+    {
+      "id": "LIMIT-CONFIDENCE-CONTROL",
+      "page": "limits.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "Measure errors by policy and consequence."
+    },
+    {
+      "id": "LIMIT-SERVICE",
+      "page": "limits.html",
+      "status": "vendor-reported",
+      "source_ids": [
+        "L-ERRORS"
+      ],
+      "summary": "The public contract names 400, 401, 402 and 503 states."
+    },
+    {
+      "id": "LIMIT-SERVICE-CONTROL",
+      "page": "limits.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "Every non-success or timeout refuses the dependent semantic route without bypassing the existing path."
+    },
+    {
+      "id": "LIMIT-RETENTION",
+      "page": "limits.html",
+      "status": "vendor-reported",
+      "source_ids": [
+        "L-PRIVACY"
+      ],
+      "summary": "Ordinary inference is described as zero-retention, but failed or slow requests may retain redacted full payloads for 30 days."
+    },
+    {
+      "id": "LIMIT-RETENTION-CONTROL",
+      "page": "limits.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "Classify and minimise every field as though the diagnostic retention exception may apply."
+    },
+    {
+      "id": "LIMIT-CREDENTIALS",
+      "page": "limits.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "Credential leak A key reaches browser code, a URL, a command argument, a fixture or a diagnostic. Control: keep credentials in a separately authorised server process and reject credential-shaped packet content. Proposed control"
+    },
+    {
+      "id": "LIMIT-SCHEMA",
+      "page": "limits.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "Schema or model drift The service changes an accepted field, model id or answer shape. Control: closed parsing, pinned contract digests and policy expiry instead of permissive fallback. Proposed control"
+    },
+    {
+      "id": "LIMIT-SOURCE",
+      "page": "limits.html",
+      "status": "inferred",
+      "source_ids": [
+        "L-INDEX",
+        "SHOGGOTH"
+      ],
+      "summary": "Source drift Levanto's web docs are mutable while Shoggoth's current contract is commit-pinned. Control: record observation dates and digests, then force claim review when an edition changes. Inferred L-INDEX SHOGGOTH"
+    },
+    {
+      "id": "LIMIT-ENDORSEMENT",
+      "page": "limits.html",
+      "status": "current",
+      "source_ids": [
+        "TARGET"
+      ],
+      "summary": "Endorsement drift A public proposal is mistaken for an approved joint product. Control: this edition says research and proposal, uses no Levanto logo and claims no commercial agreement or production integration. Current edition TARGET"
+    },
+    {
+      "id": "LIMIT-BENCHMARK",
+      "page": "limits.html",
+      "status": "vendor-reported",
+      "source_ids": [
+        "L-BENCH"
+      ],
+      "summary": "A useful record with unlike clocks. Levanto's dated Sage-versus-Claude benchmark is vendor-run. Its Sage model latency excludes network while the Claude wall-clock includes network, and the tested Sage model predates the current OpenAPI..."
+    },
+    {
+      "id": "LIMIT-COST",
+      "page": "limits.html",
+      "status": "unknown",
+      "source_ids": [
+        "L-PRICING",
+        "L-LIMITS"
+      ],
+      "summary": "No cost forecast without a packet distribution. Public pricing and limits can describe current commercial rules. They cannot establish this design's call volume, review cost, timeout budget or acceptable failure rate. Those remain unknow..."
+    },
+    {
+      "id": "LIMIT-FAIL-CLOSED",
+      "page": "limits.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "Failure posture When the semantic route fails, the system loses that advice—not its evidence, inspection path or human recovery. Proposed"
+    },
+    {
+      "id": "LIMIT-GATES",
+      "page": "limits.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "Accept the exact packet, policy and response schemas. Approve data classes, redaction, retention assumptions and destination. Define timeout, retry and every documented error branch. Measure false review and false refusal on versioned fi..."
+    },
+    {
+      "id": "ENG-THESIS",
+      "page": "engineering-primer.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "A useful adapter is not a thin HTTP wrapper. It is the closed packet, secret boundary, response validator, deterministic route, evidence record and recovery path around that call."
+    },
+    {
+      "id": "ENG-NOT-SHIPPED",
+      "page": "engineering-primer.html",
+      "status": "current",
+      "source_ids": [
+        "TARGET"
+      ],
+      "summary": "Nothing here holds a key or reaches the service. The published repository is plain HTML, CSS, one WebP and local Python checks. It contains no browser client, server process, environment-variable reader, network dependency, retry loop or..."
+    },
+    {
+      "id": "ENG-BEFORE",
+      "page": "engineering-primer.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "Before Validate the packet Closed schema, allowed policy digest, fixed destination, size caps, Unicode normalisation, secret scan, redaction and canonical input digest. Proposed"
+    },
+    {
+      "id": "ENG-DURING",
+      "page": "engineering-primer.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "During Bound the call Server-side credential lookup, TLS verification, fixed host, one deadline, bounded response bytes and no content-bearing retry. Proposed"
+    },
+    {
+      "id": "ENG-AFTER",
+      "page": "engineering-primer.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "After Validate the result Expected status, closed result schema, accepted model id, finite numeric bounds, joined digests, deterministic route and recorded refusal. Proposed"
+    },
+    {
+      "id": "ENG-ENDPOINT",
+      "page": "engineering-primer.html",
+      "status": "vendor-reported",
+      "source_ids": [
+        "L-QUICK"
+      ],
+      "summary": "Levanto's quickstart publishes https://sage.levanto.ai and requires authentication on every /decide call."
+    },
+    {
+      "id": "ENG-ENDPOINT-CONTROL",
+      "page": "engineering-primer.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "A future adapter should fix the Sage origin in reviewed configuration and never follow packet-supplied hosts, redirects or proxy settings."
+    },
+    {
+      "id": "ENG-RECORD",
+      "page": "engineering-primer.html",
+      "status": "illustrative",
+      "source_ids": [],
+      "summary": "Illustrative and unexecuted { \"schema\": \"sage-checkpoint-record/v1\", \"packet\": { \"id\": \"handoff-0042\", \"sha256\": \"<canonical packet digest>\", \"allowed_fields\": [\"summary\", \"requested_transition\", \"visible_gaps\"] }, \"policy\": { \"id\": \"nee..."
+    },
+    {
+      "id": "ENG-ERRORS",
+      "page": "engineering-primer.html",
+      "status": "proposed",
+      "source_ids": [
+        "L-ERRORS"
+      ],
+      "summary": "Input or response Adapter result Recovery left open Packet schema, policy or destination invalid Refuse before egress. Inspect the stable local finding and repair the packet or policy. 400 invalid request Refuse; no retry. Compare the ex..."
+    },
+    {
+      "id": "ENG-LOGGING",
+      "page": "engineering-primer.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "Events One correlated lifecycle Packet accepted or refused, call started, response class, schema result, local route and Promise Machine result share one safe correlation id. Proposed"
+    },
+    {
+      "id": "ENG-METRICS",
+      "page": "engineering-primer.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "Metrics Bounded counts and time Count outcomes, failures, review load and separately scoped latency. Do not label vendor model time as end-to-end application time. Proposed"
+    },
+    {
+      "id": "ENG-ALERTS",
+      "page": "engineering-primer.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "Alerts Alert on felt failure Trigger on positive fall-through, unjoined records, drift refusals, sustained service loss and review backlog—not on one noisy model score. Proposed"
+    },
+    {
+      "id": "ENG-PROOF",
+      "page": "engineering-primer.html",
+      "status": "proposed",
+      "source_ids": [],
+      "summary": "Valid, malformed, oversized and credential-bearing packet fixtures. Every documented HTTP failure plus timeout, redirect and oversized response. Unknown, missing, duplicated and non-finite response fields. Policy and model drift with no..."
+    },
+    {
+      "id": "SOURCES-EDITION",
+      "page": "sources.html",
+      "status": "current",
+      "source_ids": [
+        "TARGET",
+        "SHOGGOTH",
+        "L-INDEX",
+        "U-SCREENSHOT",
+        "U-MASCOT-KIT",
+        "GEN-HERO"
+      ],
+      "summary": "The cooperative-v1 registry binds Shoggoth to commit 934c47104e9e… , records Levanto pages as observed on 2026-08-27 and keeps supplied attachments in context-only roles."
+    },
+    {
+      "id": "SOURCES-STATUSES",
+      "page": "sources.html",
+      "status": "current",
+      "source_ids": [
+        "TARGET"
+      ],
+      "summary": "Current Observed in the named repository, response or edition. Vendor-reported An official Levanto source says it; this study did not independently validate it. Inferred A stated conclusion drawn from named evidence rather than directly..."
+    },
+    {
+      "id": "SOURCES-REPOSITORIES",
+      "page": "sources.html",
+      "status": "current",
+      "source_ids": [
+        "TARGET",
+        "SHOGGOTH",
+        "SHOGGOTH-PRIOR",
+        "PLAIDCAT"
+      ],
+      "summary": "TARGET shoggoth-and-levanto · starting commit 7c0b5fad20ae… . The public target before this site was built. SHOGGOTH Wildcat Skills at 934c47104e9e… · current Promise Machine, portable router and Hexaemeron/Fiat contract for this edition..."
+    },
+    {
+      "id": "SOURCES-LEVANTO-CONTRACT",
+      "page": "sources.html",
+      "status": "current",
+      "source_ids": [
+        "L-HOME",
+        "L-INDEX",
+        "L-OPENAPI",
+        "L-QUICK",
+        "L-KINDS",
+        "L-BATCH",
+        "L-LIMITS",
+        "L-ERRORS",
+        "L-PRICING",
+        "L-READY"
+      ],
+      "summary": "L-HOME Levanto homepage · official product description and live examples; marketing source, not independent validation. L-INDEX Public documentation index · captured digest 5afbbe15940a… . L-OPENAPI OpenAPI document · captured digest f6b..."
+    },
+    {
+      "id": "SOURCES-LEVANTO-OTHER",
+      "page": "sources.html",
+      "status": "current",
+      "source_ids": [
+        "L-PRIVACY",
+        "L-TERMS",
+        "L-DISCOVERY",
+        "L-PLATFORM-SKILL",
+        "L-BENCH"
+      ],
+      "summary": "L-PRIVACY Privacy Policy · effective 2026-07-31; retention and processing statements. Reported here, not legal advice. L-TERMS Terms of Service · effective 2026-07-31; probabilistic-output and customer-oversight boundary. Reported here,..."
+    },
+    {
+      "id": "SOURCES-ATTACHMENTS",
+      "page": "sources.html",
+      "status": "current",
+      "source_ids": [
+        "U-SCREENSHOT",
+        "U-MASCOT-KIT",
+        "GEN-HERO",
+        "GEN-SOCIAL"
+      ],
+      "summary": "The supplied screenshot and mascot kit remain context-only references. GEN-HERO binds the original page artwork; GEN-SOCIAL binds the site-wide social card and its inspected text. No supplied source image is copied into the target."
+    },
+    {
+      "id": "SOURCES-JOIN",
+      "page": "sources.html",
+      "status": "current",
+      "source_ids": [
+        "TARGET"
+      ],
+      "summary": "The HTML does not get the last word. sources.json records the edition and source roles. claims.json binds every labelled page claim to its status and source ids. The local checker refuses missing claims, status drift, unknown source ids,..."
+    }
+  ]
+}

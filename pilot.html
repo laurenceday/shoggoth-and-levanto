@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="An offline-first, reversible pilot for an advisory Sage checkpoint.">
+  <meta name="theme-color" content="#071312">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Shoggoth + Levanto">
+  <meta property="og:title" content="Shoggoth + Levanto">
+  <meta property="og:description" content="A second opinion. Not a second authority.">
+  <meta property="og:url" content="https://laurenceday.github.io/shoggoth-and-levanto/pilot.html">
+  <meta property="og:image" content="https://laurenceday.github.io/shoggoth-and-levanto/assets/generated/social-preview.webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Shoggoth and Levanto meet at a cooperative threshold">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Shoggoth + Levanto">
+  <meta name="twitter:description" content="A second opinion. Not a second authority.">
+  <meta name="twitter:image" content="https://laurenceday.github.io/shoggoth-and-levanto/assets/generated/social-preview.webp">
+  <link rel="canonical" href="https://laurenceday.github.io/shoggoth-and-levanto/pilot.html">
+  <title>Pilot | Replay, shadow, brake</title>
+  <link rel="stylesheet" href="assets/style.css?v=20260827-4">
+</head>
+<body data-page="pilot">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <nav class="nav-shell" aria-label="Primary">
+      <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span><span>Shoggoth + Levanto</span></a>
+      <div class="nav-links">
+        <a href="index.html">Overview</a><a href="sage.html">Sage</a><a href="shoggoth.html">Shoggoth</a><a href="handoffs.html">Hand-offs</a><a href="architecture.html">Architecture</a><a href="policy.html">Policy</a><a href="pilot.html" aria-current="page">Pilot</a><a href="limits.html">Limits</a><a href="engineering-primer.html">Engineering</a><a href="sources.html">Sources</a>
+      </div>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="hero-shell">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Reversible test</p>
+          <h1>Replay. Shadow.<br><em>Then grant one brake.</em></h1>
+          <p class="lede claim" data-claim="PILOT-THESIS" data-status="proposed">The first pilot earns evidence about one fixed policy question before it gains any effect. Its first live effect can only add review or refusal.</p>
+          <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+        </div>
+        <aside class="status-stack" aria-label="Page status">
+          <span class="status" data-status="proposed">Pilot not run</span>
+          <p>This site contains no live Sage call and reports no pilot result.</p>
+        </aside>
+      </div>
+    </section>
+
+    <div class="page-body">
+      <section class="intro-grid">
+        <p class="section-kicker">Narrow first question</p>
+        <div class="prose claim" data-claim="PILOT-QUESTION" data-status="proposed">
+          <h2>“Does this already-bounded packet need human review?”</h2>
+          <p class="big-copy">Start with a Yes/No review question over synthetic or specifically approved packets. Do not start with permission to publish, deploy, execute a tool or make a security or financial conclusion.</p>
+          <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-heading">
+          <p class="section-kicker">Three stages</p>
+          <h2>Each stage is useful even if the next one never opens.</h2>
+        </div>
+        <div class="timeline">
+          <article class="timeline-item claim" data-claim="PILOT-REPLAY" data-status="proposed">
+            <span class="timeline-number">1</span>
+            <div class="timeline-copy">
+              <h3>Offline replay</h3>
+              <p>Run a versioned fixture set without consequence. Record Sage's result, the existing deterministic route and an independent human label against the same packet digest.</p>
+              <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+            </div>
+          </article>
+          <article class="timeline-item claim" data-claim="PILOT-SHADOW" data-status="proposed">
+            <span class="timeline-number">2</span>
+            <div class="timeline-copy">
+              <h3>Live shadow</h3>
+              <p>Send only separately approved, allowlisted packet fields. Record what Sage would have requested, but let the existing path continue unchanged.</p>
+              <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+            </div>
+          </article>
+          <article class="timeline-item claim" id="braking-authority" data-claim="PILOT-BRAKE" data-status="proposed">
+            <span class="timeline-number">3</span>
+            <div class="timeline-copy">
+              <h3>Braking authority</h3>
+              <p>Permit one policy edition to add review or refusal. Keep every positive route, evidence gate and consequence check exactly as before.</p>
+              <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-heading">
+          <p class="section-kicker">Fixture shape</p>
+          <h2>Measure the decision, not the story around it.</h2>
+        </div>
+        <div class="claim" data-claim="PILOT-FIXTURE" data-status="illustrative">
+          <span class="example-label">Illustrative and unexecuted</span>
+          <pre class="code-sample"><code>{
+  "fixture_id": "publication-review-0042",
+  "packet_digest": "sha256:&lt;fixture bytes&gt;",
+  "policy_digest": "sha256:&lt;question + route rule&gt;",
+  "expected_human_label": "review",
+  "sage_result": { "answer": "yes", "confidence": 0.78 },
+  "deterministic_route": "hold",
+  "consequence": 3,
+  "effect": "none"
+}</code></pre>
+          <div class="claim-meta"><span class="status" data-status="illustrative">Illustrative</span></div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-heading">
+          <p class="section-kicker">What to measure</p>
+          <h2>Disagreement is the result, not an inconvenience.</h2>
+        </div>
+        <div class="card-grid">
+          <article class="card claim" data-claim="PILOT-MEASURE-DISAGREEMENT" data-status="proposed">
+            <span class="card-index">Decision</span><h3>Agreement by packet class</h3>
+            <p>Compare Sage, deterministic policy and independent human labels. Keep false review and false refusal separate.</p>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+          </article>
+          <article class="card claim" data-claim="PILOT-MEASURE-CONFIDENCE" data-status="proposed">
+            <span class="card-index">Calibration</span><h3>Error by confidence band</h3>
+            <p>Measure whether higher confidence predicts agreement for this exact question and distribution; assume no transfer to another policy.</p>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+          </article>
+          <article class="card claim" data-claim="PILOT-MEASURE-OPS" data-status="proposed">
+            <span class="card-index">Operations</span><h3>Failure and review load</h3>
+            <p>Record latency scope, timeouts, 400/401/402/503 responses, payload refusals, review queue size and time to recovery.</p>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+          </article>
+        </div>
+      </section>
+
+      <aside class="boundary-callout claim" data-claim="PILOT-ASYMMETRY" data-status="proposed">
+        <strong>Non-negotiable first-live rule</strong>
+        <p>The pilot can stop more work than before. It cannot permit more work than before.</p>
+        <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+      </aside>
+
+      <section class="section-grid">
+        <p class="section-kicker">Stop conditions</p>
+        <div>
+          <ul class="check-list claim" data-claim="PILOT-STOPS" data-status="proposed">
+            <li>Any credential, private path or undeclared field reaches a request candidate.</li>
+            <li>The response schema or accepted model edition changes without policy review.</li>
+            <li>A service failure falls through to a positive route.</li>
+            <li>False refusals exceed the accepted bound for the packet class.</li>
+            <li>A result cannot be joined to its packet, policy and source digests.</li>
+            <li>A reviewer cannot explain or reverse the route from the stored record.</li>
+          </ul>
+          <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+        </div>
+      </section>
+
+      <section class="section-grid">
+        <p class="section-kicker">This edition</p>
+        <div class="prose claim" data-claim="PILOT-NOT-RUN" data-status="current">
+          <h2>No pilot evidence is smuggled into the proposal.</h2>
+          <p class="big-copy">The repository is a static explanation and test harness for its own claims and assets. It sends no packet, stores no decision and establishes no calibration, latency or suitability result.</p>
+          <div class="claim-meta"><span class="status" data-status="current">Current</span><a class="source-chip" href="sources.html#src-TARGET">TARGET</a></div>
+        </div>
+      </section>
+
+      <a class="next-link" href="limits.html">Read the limits before building</a>
+    </div>
+  </main>
+  <footer class="site-footer"><div class="footer-shell"><p data-edition="cooperative-v1">Edition cooperative-v1 · pilot design only; no live result</p><p><a href="sources.html">Source and claim record</a></p></div></footer>
+</body>
+</html>
