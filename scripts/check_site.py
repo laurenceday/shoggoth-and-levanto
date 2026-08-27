@@ -40,7 +40,20 @@ ALLOWED_STATUSES = {
     "unknown",
 }
 UNSOURCED_STATUSES = {"proposed", "illustrative", "unknown"}
-FORBIDDEN_TAGS = {"script", "form", "iframe", "object", "embed"}
+FORBIDDEN_TAGS = {
+    "audio",
+    "base",
+    "embed",
+    "form",
+    "iframe",
+    "object",
+    "picture",
+    "script",
+    "source",
+    "style",
+    "track",
+    "video",
+}
 IGNORED_DIRS = {".git", ".hexaemeron", ".elenchus", ".metron", ".venv", "__pycache__"}
 FORBIDDEN_SOURCE_DIRS = {
     "mascot-imagegen-kit",
@@ -101,6 +114,7 @@ class PageParser(HTMLParser):
         super().__init__(convert_charrefs=True)
         self.ids: set[str] = set()
         self.duplicate_ids: set[str] = set()
+        self.duplicate_attributes: list[str] = []
         self.hrefs: list[str] = []
         self.nav_hrefs: list[str] = []
         self.current_hrefs: list[str] = []
@@ -111,6 +125,8 @@ class PageParser(HTMLParser):
         self.editions: list[str] = []
         self.forbidden_tags: list[str] = []
         self.runtime_attributes: list[str] = []
+        self.active_attributes: list[str] = []
+        self.unsupported_link_rels: list[str] = []
         self.metadata: dict[str, list[str]] = {}
         self.canonicals: list[str] = []
         self.refresh_meta = False
@@ -118,6 +134,10 @@ class PageParser(HTMLParser):
         self.nav_depth = 0
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        attribute_names = [key.casefold() for key, _ in attrs]
+        self.duplicate_attributes.extend(
+            f"{tag}.{key}" for key in sorted(set(attribute_names)) if attribute_names.count(key) > 1
+        )
         values = {key: value for key, value in attrs}
         if tag == "nav":
             self.nav_depth += 1
@@ -129,6 +149,11 @@ class PageParser(HTMLParser):
                 self.duplicate_ids.add(identifier)
             self.ids.add(identifier)
         self.runtime_attributes.extend(key for key in values if key.startswith("on"))
+        self.active_attributes.extend(
+            f"{tag}.{key}"
+            for key in values
+            if key in {"background", "ping", "poster", "srcset", "style"}
+        )
         if tag == "meta" and (values.get("http-equiv") or "").lower() == "refresh":
             self.refresh_meta = True
         if tag == "meta":
@@ -148,6 +173,10 @@ class PageParser(HTMLParser):
         if tag == "link" and "canonical" in (values.get("rel") or "").split():
             if href is not None:
                 self.canonicals.append(href)
+        if tag == "link":
+            rels = frozenset((values.get("rel") or "").casefold().split())
+            if rels not in {frozenset({"canonical"}), frozenset({"stylesheet"})}:
+                self.unsupported_link_rels.append(" ".join(sorted(rels)) or "<missing>")
         if tag == "img":
             self.images.append({key: value or "" for key, value in attrs})
         claim = values.get("data-claim")
@@ -213,12 +242,24 @@ def check_page_contract(root: Path, parsed: dict[str, PageParser], findings: lis
             findings.append(Finding("S010", name, f"body data-page must be {expected_body!r}"))
         if page.duplicate_ids:
             findings.append(Finding("S009", name, f"duplicate ids: {sorted(page.duplicate_ids)}"))
+        if page.duplicate_attributes:
+            findings.append(
+                Finding("S097", name, f"duplicate HTML attributes: {sorted(set(page.duplicate_attributes))}")
+            )
         if page.forbidden_tags:
             tags = ", ".join(sorted(set(page.forbidden_tags)))
             findings.append(Finding("S011", name, f"runtime tag present: {tags}"))
         if page.runtime_attributes:
             findings.append(
                 Finding("S021", name, f"runtime event attributes present: {sorted(set(page.runtime_attributes))}")
+            )
+        if page.unsupported_link_rels:
+            findings.append(
+                Finding("S098", name, f"unsupported link relations: {sorted(set(page.unsupported_link_rels))}")
+            )
+        if page.active_attributes:
+            findings.append(
+                Finding("S099", name, f"unreviewed active attributes: {sorted(set(page.active_attributes))}")
             )
         if page.refresh_meta:
             findings.append(Finding("S022", name, "meta refresh is not accepted"))
@@ -455,7 +496,7 @@ def check_social_preview(
 def local_target(root: Path, page_name: str, href: str) -> tuple[Path, str] | None:
     split = urlsplit(href)
     if split.scheme:
-        if split.scheme.lower() not in {"http", "https", "mailto", "tel"}:
+        if split.scheme.lower() not in {"https", "mailto", "tel"}:
             raise ValueError(f"unsupported URI scheme {split.scheme!r}")
         return None
     if split.netloc:
@@ -646,14 +687,24 @@ def check_repository_boundary(root: Path, findings: list[Finding]) -> None:
         findings.append(Finding("S073", "assets/style.css", "shared stylesheet is missing"))
     else:
         css = css_path.read_text(encoding="utf-8")
-        if re.search(r"(?i)@import\b|url\(\s*['\"]?https?://", css):
-            findings.append(Finding("S074", "assets/style.css", "remote CSS asset is present"))
+        if re.search(r"(?i)@import\b|url\s*\(", css):
+            findings.append(Finding("S074", "assets/style.css", "CSS imports and URL-bearing assets are not accepted"))
     forbidden_asset_suffixes = {".png", ".jpg", ".jpeg", ".gif", ".avif"}
     assets = root / "assets"
     if assets.is_dir():
+        allowed_assets = {
+            "assets/generated/cooperative-threshold.webp",
+            "assets/generated/social-preview.webp",
+            "assets/imagegen-prompts.md",
+            "assets/style.css",
+        }
         for path in assets.rglob("*"):
-            if path.is_file() and path.suffix.lower() in forbidden_asset_suffixes:
-                findings.append(Finding("S075", str(path.relative_to(root)), "asset format is not approved"))
+            if path.is_file():
+                relative = str(path.relative_to(root))
+                if path.suffix.lower() in forbidden_asset_suffixes:
+                    findings.append(Finding("S075", relative, "asset format is not approved"))
+                if relative not in allowed_assets:
+                    findings.append(Finding("S079", relative, "asset is outside the approved static inventory"))
 
 
 def check_budgets(root: Path, findings: list[Finding]) -> None:
