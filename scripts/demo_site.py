@@ -34,6 +34,7 @@ def validate_port(value: int) -> int:
 
 
 def handler_for(root: Path, base_path: str):
+    root = root.resolve()
     routes = {
         base_path + target.path: (
             root / (target.path or "index.html"),
@@ -113,6 +114,7 @@ def run_demo(
         records = fetch_inventory(
             base_url,
             expected_edition,
+            expected_root=root,
             maximum_redirects=0,
         )
     finally:
