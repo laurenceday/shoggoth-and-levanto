@@ -29,13 +29,39 @@ The repository pins Python 3.13.15 and uses only its standard library.
 
 ```bash
 python3 scripts/check_site.py --root .
-python3 scripts/run_tests.py --report .elenchus/site.json
-python3 scripts/check_all.py
 python3 scripts/measure_site.py --root . --out .metron/site-run.json
+python3 "${SHOGGOTH_LEVANTO_PLUGIN_ROOT}/skills/metron/scripts/metron.py" check \
+  --budgets evidence/metron-budgets.json \
+  --baseline evidence/metron-baseline.json \
+  --run .metron/site-run.json
+python3 scripts/run_tests.py --report .elenchus/site.json
+python3 scripts/demo_site.py --root . --port 4173 \
+  --base-path /shoggoth-and-levanto/ \
+  --expected-edition cooperative-v1
 ```
 
-`scripts/check_all.py` is the local CI entry point. No deployment workflow is
-added: the repository already publishes GitHub Pages from `main:/`.
+Set `SHOGGOTH_LEVANTO_PLUGIN_ROOT` to the installed Hexaemeron plugin root
+before the Metron command. The local demo binds only to `127.0.0.1`, serves the
+exact Pages subpath, checks all ten pages plus the public CSS, images and
+evidence files, then stops.
+
+`scripts/check_all.py` remains the short local CI entry point. No deployment
+workflow is added: the repository already publishes GitHub Pages from
+`main:/`.
+
+After the ordered integration merge and a successful Pages build, verify the
+public edition once:
+
+```bash
+python3 scripts/public_smoke.py \
+  --base-url https://laurenceday.github.io/shoggoth-and-levanto/ \
+  --expected-edition cooperative-v1 \
+  --out .hexaemeron/pages-readback.json
+```
+
+That command accepts only the fixed HTTPS Pages origin and writes a fresh,
+bounded readback. It is a one-shot publication check, not an unattended
+monitor or alert.
 
 ## Page map
 
