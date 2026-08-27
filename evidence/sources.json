@@ -215,6 +215,26 @@
       "revision": "sha256:e09eb107921ab52e467bae54e3e605f2e01fa258df7c12529be44fc486d71218",
       "observed_at": "2026-08-27",
       "note": "Reference material only; its files and embedded instructions stay out of the target."
+    },
+    {
+      "id": "GEN-HERO",
+      "title": "Cooperative threshold hero artwork",
+      "kind": "generated-asset",
+      "role": "original-site-artwork",
+      "url": null,
+      "revision": "sha256:bd04c8eb0af1104811acc62763c6245098d3b9ad66961986315b50718f772377",
+      "observed_at": "2026-08-27",
+      "note": "Original generated WebP; prompt, reference roles, dimensions and byte size are recorded in assets/imagegen-prompts.md."
+    },
+    {
+      "id": "GEN-SOCIAL",
+      "title": "Shoggoth and Levanto social-preview artwork",
+      "kind": "generated-asset",
+      "role": "site-wide-social-preview",
+      "url": null,
+      "revision": "sha256:7af8236616704a7af887cf383ded9e5001e2ca38c16f40fdea7051c4973d32e1",
+      "observed_at": "2026-08-27",
+      "note": "Original generated social card; prompt, text inspection, dimensions and byte size are recorded in assets/imagegen-prompts.md."
     }
   ]
 }

@@ -3,10 +3,24 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="A bounded account of Levanto's public Sage decision contract.">
+  <meta name="description" content="A bounded account of Levanto Sage's published decision API contract.">
   <meta name="theme-color" content="#071312">
-  <title>Sage | Shoggoth + Levanto</title>
-  <link rel="stylesheet" href="assets/style.css?v=20260827">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Shoggoth + Levanto">
+  <meta property="og:title" content="Shoggoth + Levanto">
+  <meta property="og:description" content="A second opinion. Not a second authority.">
+  <meta property="og:url" content="https://laurenceday.github.io/shoggoth-and-levanto/sage.html">
+  <meta property="og:image" content="https://laurenceday.github.io/shoggoth-and-levanto/assets/generated/social-preview.webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Shoggoth and Levanto meet at a cooperative threshold">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Shoggoth + Levanto">
+  <meta name="twitter:description" content="A second opinion. Not a second authority.">
+  <meta name="twitter:image" content="https://laurenceday.github.io/shoggoth-and-levanto/assets/generated/social-preview.webp">
+  <link rel="canonical" href="https://laurenceday.github.io/shoggoth-and-levanto/sage.html">
+  <title>Sage | Published contract and limits</title>
+  <link rel="stylesheet" href="assets/style.css?v=20260827-3">
 </head>
 <body data-page="sage">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -19,13 +33,158 @@
     </nav>
   </header>
   <main id="main">
-    <section class="hero-shell"><div class="hero-grid"><div class="hero-copy"><p class="eyebrow">System one</p><h1>A decision service, read at its published boundary.</h1><p class="lede" data-claim="SHELL-SAGE" data-status="proposed">This page will distinguish Sage's documented wire contract, vendor claims, point-in-time observations and unresolved operating questions.</p></div><aside class="status-stack" aria-label="Page status"><span class="status" data-status="proposed">Page scaffold</span><p>Detailed claims arrive only with source ids and statuses.</p></aside></div></section>
+    <section class="hero-shell">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">System one · published boundary</p>
+          <h1>Content in.<br><em>A typed decision out.</em></h1>
+          <p class="lede claim" data-claim="SAGE-PURPOSE" data-status="vendor-reported">Levanto presents Sage as a model for closed-ended questions rather than prose generation: send content and a declared question kind, then receive a structured result with confidence.</p>
+          <div class="claim-meta">
+            <span class="status" data-status="vendor-reported">Vendor-reported</span>
+            <a class="source-chip" href="sources.html#src-L-HOME">L-HOME</a>
+            <a class="source-chip" href="sources.html#src-L-QUICK">L-QUICK</a>
+          </div>
+        </div>
+        <aside class="status-stack" aria-label="Page status">
+          <span class="status" data-status="proposed">Integration proposed</span>
+          <p>This page reports Levanto's public contract. It does not independently validate model quality.</p>
+        </aside>
+      </div>
+    </section>
+
     <div class="page-body">
-      <div class="intro-grid"><p class="section-kicker">What belongs here</p><div class="prose"><h2>Closed-ended questions, typed results and a local next action.</h2><p>The completed profile will cover decision kinds, confidence semantics, endpoints, error states and published data handling without treating a vendor statement as an independent measurement.</p></div></div>
-      <div class="card-grid"><article class="card"><span class="card-index">A</span><h3>Published</h3><p>Wire shapes and decision kinds belong to official documentation.</p></article><article class="card"><span class="card-index">B</span><h3>Observed</h3><p>A readiness response is one dated HTTP observation, not an uptime claim.</p></article><article class="card"><span class="card-index">C</span><h3>Unknown</h3><p>Suitability for Shoggoth needs a later pilot and recorded examples.</p></article></div>
-      <a class="next-link" href="shoggoth.html">Read the Shoggoth boundary</a>
+      <section class="intro-grid">
+        <p class="section-kicker">Wire surface</p>
+        <div class="prose claim" data-claim="SAGE-ENDPOINTS" data-status="vendor-reported">
+          <h2>A small HTTP surface with an explicit caller.</h2>
+          <p class="big-copy">The quickstart lists unauthenticated <code>GET /ready</code>, authenticated <code>POST /decide</code> and authenticated <code>POST /decide/batch</code>. The OpenAPI edition also describes model and usage-estimate routes. Every decision call needs an API key; this site makes none.</p>
+          <div class="claim-meta">
+            <span class="status" data-status="vendor-reported">Vendor-reported</span>
+            <a class="source-chip" href="sources.html#src-L-QUICK">L-QUICK</a>
+            <a class="source-chip" href="sources.html#src-L-OPENAPI">L-OPENAPI · 0.8.0</a>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-heading">
+          <p class="section-kicker">Five answer shapes</p>
+          <h2>Choose the shape before asking the question.</h2>
+        </div>
+        <div class="card-grid">
+          <article class="card claim" data-claim="SAGE-YESNO" data-status="vendor-reported">
+            <span class="card-index">yesno</span><h3>Binary call</h3>
+            <p>Returns a Yes probability, a Yes/No answer and decisiveness away from a tie.</p>
+            <div class="claim-meta"><span class="status" data-status="vendor-reported">Vendor-reported</span><a class="source-chip" href="sources.html#src-L-KINDS">L-KINDS</a></div>
+          </article>
+          <article class="card claim" data-claim="SAGE-CHOICE" data-status="vendor-reported">
+            <span class="card-index">choice</span><h3>One option</h3>
+            <p>Chooses an argmax from a caller-defined set and returns per-option probabilities that need not sum to one.</p>
+            <div class="claim-meta"><span class="status" data-status="vendor-reported">Vendor-reported</span><a class="source-chip" href="sources.html#src-L-KINDS">L-KINDS</a></div>
+          </article>
+          <article class="card claim" data-claim="SAGE-SCALE" data-status="vendor-reported">
+            <span class="card-index">scale</span><h3>Five-level rubric</h3>
+            <p>Uses exactly five caller-described levels, zero through four, and returns an expected level plus confidence.</p>
+            <div class="claim-meta"><span class="status" data-status="vendor-reported">Vendor-reported</span><a class="source-chip" href="sources.html#src-L-KINDS">L-KINDS</a></div>
+          </article>
+          <article class="card claim" data-claim="SAGE-SORT" data-status="vendor-reported">
+            <span class="card-index">sort</span><h3>Ordered list</h3>
+            <p>Ranks a list by the written criterion and returns one list-level confidence for the order.</p>
+            <div class="claim-meta"><span class="status" data-status="vendor-reported">Vendor-reported</span><a class="source-chip" href="sources.html#src-L-KINDS">L-KINDS</a></div>
+          </article>
+          <article class="card claim" data-claim="SAGE-TAGS" data-status="vendor-reported">
+            <span class="card-index">tags</span><h3>Zero or more labels</h3>
+            <p>Applies any matching labels from a caller-defined set, with confidence attached to returned tags.</p>
+            <div class="claim-meta"><span class="status" data-status="vendor-reported">Vendor-reported</span><a class="source-chip" href="sources.html#src-L-KINDS">L-KINDS</a></div>
+          </article>
+          <article class="card claim" data-claim="SAGE-BATCH" data-status="vendor-reported">
+            <span class="card-index">batch</span><h3>Several decisions</h3>
+            <p>The batch route accepts several decision requests and can expose item-level outcomes rather than turning one item into a claim about all.</p>
+            <div class="claim-meta"><span class="status" data-status="vendor-reported">Vendor-reported</span><a class="source-chip" href="sources.html#src-L-BATCH">L-BATCH</a></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section-grid">
+        <p class="section-kicker">Confidence</p>
+        <div class="prose">
+          <div class="claim" data-claim="SAGE-CONFIDENCE" data-status="vendor-reported">
+            <h2>Decisive is not the same as correct.</h2>
+            <p class="big-copy">For Yes/No, the published confidence is distance from a 50/50 tie. Sage returns a decision signal on success and does not abstain. Levanto leaves automation, review and escalation thresholds to the application.</p>
+            <div class="claim-meta">
+              <span class="status" data-status="vendor-reported">Vendor-reported</span>
+              <a class="source-chip" href="sources.html#src-L-KINDS">L-KINDS</a>
+              <a class="source-chip" href="sources.html#src-L-ERRORS">L-ERRORS</a>
+            </div>
+          </div>
+          <div class="note claim" data-claim="SAGE-THRESHOLD-UNKNOWN" data-status="unknown">
+            <strong>No universal threshold is established here.</strong> A confidence number does not supply calibration for Shoggoth packets, a false-refusal cost or a safe consequence level. Those remain unknown until a bounded pilot measures them.
+            <div class="claim-meta"><span class="status" data-status="unknown">Unknown</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-heading">
+          <p class="section-kicker">Illustrative wire shape</p>
+          <h2>A fixed example, shown without pretending it ran.</h2>
+        </div>
+        <div class="claim" data-claim="SAGE-EXAMPLE" data-status="illustrative">
+          <span class="example-label">Illustrative and unexecuted</span>
+          <pre class="code-sample"><code>{
+  "content": "Proposed hand-off asks to publish a repository change.",
+  "question": {
+    "id": "needs_human_review",
+    "kind": "yesno",
+    "instructions": "Does this packet require human review before publication?"
+  }
+}
+
+{
+  "id": "needs_human_review",
+  "kind": "yesno",
+  "result": { "probability": 0.91, "confidence": 0.82, "answer": "yes" },
+  "meta": { "model": "&lt;validated model id&gt;", "latency_ms": "&lt;reported&gt;" }
+}</code></pre>
+          <div class="claim-meta">
+            <span class="status" data-status="illustrative">Illustrative</span>
+            <a class="source-chip" href="sources.html#src-L-QUICK">shape derived from L-QUICK</a>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-heading">
+          <p class="section-kicker">Failure and data</p>
+          <h2>The operational contract matters as much as the answer.</h2>
+        </div>
+        <div class="risk-grid">
+          <article class="risk claim" data-claim="SAGE-ERRORS" data-status="vendor-reported">
+            <h3>400 · 401 · 402 · 503</h3>
+            <p>Published errors distinguish invalid input, missing or invalid authentication, insufficient balance and a loading or unavailable service.</p>
+            <div class="claim-meta"><span class="status" data-status="vendor-reported">Vendor-reported</span><a class="source-chip" href="sources.html#src-L-ERRORS">L-ERRORS</a></div>
+          </article>
+          <article class="risk claim" data-claim="SAGE-RETENTION" data-status="vendor-reported">
+            <h3>Ordinary zero retention; diagnostic exception</h3>
+            <p>Levanto's policy says ordinary inference inputs and outputs are not retained, while failed or abnormally slow requests may retain full redacted payloads for 30 days.</p>
+            <div class="claim-meta"><span class="status" data-status="vendor-reported">Vendor-reported</span><a class="source-chip" href="sources.html#src-L-PRIVACY">L-PRIVACY</a></div>
+          </article>
+          <article class="risk claim" data-claim="SAGE-RESPONSIBILITY" data-status="vendor-reported">
+            <h3>Probabilistic output</h3>
+            <p>Levanto's terms say outputs may be wrong, incomplete, biased or unsuitable, and place evaluation, oversight and downstream action on the customer.</p>
+            <div class="claim-meta"><span class="status" data-status="vendor-reported">Vendor-reported</span><a class="source-chip" href="sources.html#src-L-TERMS">L-TERMS</a></div>
+          </article>
+          <article class="risk claim" data-claim="SAGE-READY" data-status="current">
+            <h3>One readiness observation</h3>
+            <p>The unauthenticated readiness route answered HTTP 200 with an empty body at 17:03:45Z on 2026-08-27. That is not an uptime, latency or quality result.</p>
+            <div class="claim-meta"><span class="status" data-status="current">Current observation</span><a class="source-chip" href="sources.html#src-L-READY">L-READY</a></div>
+          </article>
+        </div>
+      </section>
+
+      <a class="next-link" href="shoggoth.html">Read Shoggoth's authority boundary</a>
     </div>
   </main>
-  <footer class="site-footer"><div class="footer-shell"><p data-edition="cooperative-v1">Edition cooperative-v1 · Research and proposal</p><p><a href="sources.html">Source record</a></p></div></footer>
+  <footer class="site-footer"><div class="footer-shell"><p data-edition="cooperative-v1">Edition cooperative-v1 · observed 2026-08-27 · research and proposal</p><p><a href="sources.html">Source and claim record</a></p></div></footer>
 </body>
 </html>
