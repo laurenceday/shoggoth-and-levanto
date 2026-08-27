@@ -59,10 +59,16 @@ class SmokeError(ValueError):
 
 
 class TargetFailure(SmokeError):
-    def __init__(self, target: str, detail: str) -> None:
+    def __init__(
+        self,
+        target: str,
+        detail: str,
+        records: list[dict[str, object]] | None = None,
+    ) -> None:
         super().__init__(detail)
         self.target = target or "<site root>"
         self.detail = detail
+        self.records = list(records or [])
 
 
 def validate_edition(value: str) -> str:
@@ -146,7 +152,11 @@ def fetch_inventory(
     records: list[dict[str, object]] = []
     edition_marker = f'data-edition="{expected_edition}"'.encode("utf-8")
     for target in PUBLIC_TARGETS:
-        expected_body = read_expected_body(expected_root, target)
+        try:
+            expected_body = read_expected_body(expected_root, target)
+        except TargetFailure as exc:
+            exc.records = list(records)
+            raise
         expected_digest = hashlib.sha256(expected_body).hexdigest()
         url = urljoin(base_url, target.path)
         request = Request(
@@ -164,24 +174,30 @@ def fetch_inventory(
                 content_type = response.headers.get_content_type().lower()
                 body = response.read(MAX_RESPONSE_BYTES + 1)
         except (HTTPError, URLError, OSError, TimeoutError, ValueError) as exc:
-            raise TargetFailure(target.path, f"request failed: {exc}") from exc
+            raise TargetFailure(target.path, f"request failed: {exc}", records) from exc
         if not url_within_base(final_url, base_url):
-            raise TargetFailure(target.path, "final URL left the fixed site base")
+            raise TargetFailure(target.path, "final URL left the fixed site base", records)
         if status != 200:
-            raise TargetFailure(target.path, f"expected HTTP 200, observed {status}")
+            raise TargetFailure(target.path, f"expected HTTP 200, observed {status}", records)
         if content_type != target.content_type:
             raise TargetFailure(
                 target.path,
                 f"expected {target.content_type}, observed {content_type}",
+                records,
             )
         if not body:
-            raise TargetFailure(target.path, "response body is empty")
+            raise TargetFailure(target.path, "response body is empty", records)
         if len(body) > MAX_RESPONSE_BYTES:
-            raise TargetFailure(target.path, "response exceeds the two-megabyte bound")
+            raise TargetFailure(
+                target.path,
+                "response exceeds the two-megabyte bound",
+                records,
+            )
         if target.html and body.count(edition_marker) != 1:
             raise TargetFailure(
                 target.path,
                 f"edition marker {expected_edition!r} was not present exactly once",
+                records,
             )
         observed_digest = hashlib.sha256(body).hexdigest()
         if body != expected_body:
@@ -190,6 +206,7 @@ def fetch_inventory(
                 "public bytes differ from the checked local file; "
                 f"expected {len(expected_body)} bytes sha256:{expected_digest}, "
                 f"observed {len(body)} bytes sha256:{observed_digest}",
+                records,
             )
         records.append(
             {
@@ -269,6 +286,13 @@ def deployment_context() -> dict[str, object]:
     }
 
 
+def require_deployment_context() -> dict[str, object]:
+    context = deployment_context()
+    if context["github_sha"] is None:
+        raise SmokeError("GITHUB_SHA must name the 40-character integrated commit")
+    return context
+
+
 def readback_document(
     base_url: str,
     expected_edition: str,
@@ -338,11 +362,16 @@ def validate_complete_readback(
         raise SmokeError("readback timestamp is invalid") from exc
     if not str(checked_at).endswith("Z") or parsed_time.tzinfo is None:
         raise SmokeError("readback timestamp is not UTC")
+    checked_at_ns = int(parsed_time.timestamp() * 1_000_000_000)
+    if checked_at_ns < started_ns:
+        raise SmokeError("readback timestamp predates this smoke run")
+    if checked_at_ns > time.time_ns() + 60_000_000_000:
+        raise SmokeError("readback timestamp is implausibly far in the future")
     context = document.get("deployment_context")
     if not isinstance(context, dict) or set(context) != {"github_sha", "github_run_id"}:
         raise SmokeError("readback deployment context is invalid")
-    if context["github_sha"] is not None and not COMMIT.fullmatch(str(context["github_sha"])):
-        raise SmokeError("readback GitHub commit is invalid")
+    if context["github_sha"] is None or not COMMIT.fullmatch(str(context["github_sha"])):
+        raise SmokeError("readback GitHub commit is missing or invalid")
     if context["github_run_id"] is not None and not RUN_ID.fullmatch(str(context["github_run_id"])):
         raise SmokeError("readback GitHub run id is invalid")
     records = document.get("targets")
@@ -393,6 +422,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         base_url = validate_public_base(args.base_url)
         expected_edition = validate_edition(args.expected_edition)
+        require_deployment_context()
         output = safe_output(root, args.out)
         if output.is_symlink():
             raise SmokeError("readback output cannot be symbolic")
@@ -408,7 +438,7 @@ def main(argv: list[str] | None = None) -> int:
             failure = readback_document(
                 base_url,
                 expected_edition,
-                [],
+                exc.records,
                 failed_target=exc.target,
                 failure=exc.detail,
             )

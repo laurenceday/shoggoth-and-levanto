@@ -101,3 +101,21 @@ Elenchus verdict: null
 | -- | -- | -- | none | -- |
 
 Leads not pursued: none
+
+## Step 3, round 1 -- 2026-08-27T18:34:19Z
+
+Audit schema: fiat-audit-round/v2
+
+Covered: authority-inversion=reviewed; status-collapse=reviewed; policy-drift=reviewed; confidence-misread=reviewed; service-failure=reviewed; schema-drift=reviewed; credential-leak=reviewed; content-egress=reviewed; diagnostic-retention=reviewed; prompt-injection=reviewed; source-drift=reviewed; skill-surface-divergence=reviewed; benchmark-overclaim=reviewed; endorsement-drift=reviewed; source-copying=reviewed; image-provenance=reviewed; image-cache-layout=reviewed; link-integrity=reviewed; page-accessibility=reviewed; asset-budget=reviewed; pages-publication=reviewed; pages-cache=reviewed; test-runner-contract=reviewed; hidden-runtime=reviewed
+
+Not checked: the live Pages build and cache response, which remain reserved for the integration receipt; any future Sage adapter's live network, schema and data handling
+
+Elenchus verdict: guarded
+
+| id | severity | file | finding | status |
+| --- | --- | --- | --- | --- |
+| S3-R1-01 | high | scripts/public_smoke.py | A public site carrying the expected edition marker, status and content type passed even when its bytes differed from the checked local files, so a stale build from the same edition could earn a clean readback. | fixed in this round |
+| S3-R1-02 | medium | scripts/public_smoke.py | The complete-readback validator ignored content type, digest, edition, URL, deployment-context shape and local-match fields once target names, status and positive byte counts were present. | fixed in this round |
+| S3-R1-03 | low | scripts/public_smoke.py | An output unlink or write failure escaped the bounded refusal path and could emit a traceback containing a private local path. | fixed in this round |
+
+Leads not pursued: none

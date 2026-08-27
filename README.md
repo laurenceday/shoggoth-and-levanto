@@ -50,7 +50,8 @@ workflow is added: the repository already publishes GitHub Pages from
 `main:/`.
 
 After the ordered integration merge and a successful Pages build, verify the
-public edition once:
+public edition once. Set `GITHUB_SHA` to that 40-character integrated commit;
+GitHub Actions already supplies it in a workflow environment.
 
 ```bash
 python3 scripts/public_smoke.py \

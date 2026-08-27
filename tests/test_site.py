@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import hashlib
+import os
 import shutil
 import tempfile
 import threading
@@ -508,6 +509,7 @@ class SiteContractTests(unittest.TestCase):
             root = Path(directory)
             output = safe_readback_output(root, ".hexaemeron/readback.json")
             document = readback_document(PUBLIC_BASE_URL, "cooperative-v1", records)
+            document["deployment_context"]["github_sha"] = "a" * 40
             atomic_write_readback(output, document)
             self.assertTrue(
                 validate_complete_readback(output, 0, expected_root=ROOT)["complete"]
@@ -528,6 +530,23 @@ class SiteContractTests(unittest.TestCase):
             atomic_write_readback(output, document)
             with self.assertRaises(SmokeError):
                 validate_complete_readback(output, 0, expected_root=ROOT)
+
+            records[0]["content_type"] = PUBLIC_TARGETS[0].content_type
+            document["deployment_context"]["github_sha"] = None
+            atomic_write_readback(output, document)
+            with self.assertRaises(SmokeError):
+                validate_complete_readback(output, 0, expected_root=ROOT)
+
+            document["deployment_context"]["github_sha"] = "a" * 40
+            document["checked_at_utc"] = "2000-01-01T00:00:00Z"
+            freshness_start = time.time_ns()
+            atomic_write_readback(output, document)
+            with self.assertRaises(SmokeError):
+                validate_complete_readback(
+                    output,
+                    freshness_start,
+                    expected_root=ROOT,
+                )
 
     def test_public_smoke_rejects_same_edition_stale_bytes(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -556,6 +575,10 @@ class SiteContractTests(unittest.TestCase):
                     msg=caught.exception.detail,
                 )
                 self.assertIn("public bytes differ", caught.exception.detail)
+                self.assertEqual(
+                    [record["target"] for record in caught.exception.records],
+                    ["/"],
+                )
             finally:
                 server.shutdown()
                 server.server_close()
@@ -565,7 +588,10 @@ class SiteContractTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             blocked_output = Path(directory) / "readback.json"
             blocked_output.mkdir()
-            with patch("scripts.public_smoke.safe_output", return_value=blocked_output):
+            with (
+                patch("scripts.public_smoke.safe_output", return_value=blocked_output),
+                patch.dict(os.environ, {"GITHUB_SHA": "a" * 40}, clear=False),
+            ):
                 result = public_smoke_main(
                     [
                         "--base-url",
