@@ -223,6 +223,82 @@ class SiteContractTests(unittest.TestCase):
         parser.close()
         self.assertEqual(getattr(parser, "duplicate_ids", set()), {"same"})
 
+    def test_duplicate_html_attributes_are_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = self.copy_site(directory)
+            page = root / "index.html"
+            page.write_text(
+                page.read_text(encoding="utf-8").replace(
+                    '<img src="assets/generated/cooperative-threshold.webp"',
+                    '<img src="https://example.com/unreviewed.webp" src="assets/generated/cooperative-threshold.webp"',
+                    1,
+                ),
+                encoding="utf-8",
+            )
+            self.assertIn("S097", {finding.code for finding in check_site(root)})
+
+    def test_active_html_bypass_surfaces_are_rejected(self) -> None:
+        for href in (
+            "http://example.com/insecure",
+            "https:relative",
+            "https://user:pass@example.com/credential-bearing",
+        ):
+            with self.subTest(href=href), self.assertRaises(ValueError):
+                local_target(ROOT, "index.html", href)
+        with tempfile.TemporaryDirectory() as directory:
+            root = self.copy_site(directory)
+            page = root / "index.html"
+            page.write_text(
+                page.read_text(encoding="utf-8").replace(
+                    "</head>",
+                    '<base href="https://example.com/"><link rel="preconnect" href="https://example.com/"><style>body{color:red}</style></head>',
+                    1,
+                ).replace(
+                    '<main id="main">',
+                    '<svg><image href="https://example.com/pixel"></image></svg><main id="main" style="background:url(https://example.com/pixel)">',
+                    1,
+                ),
+                encoding="utf-8",
+            )
+            codes = {finding.code for finding in check_site(root)}
+            self.assertIn("S011", codes)
+            self.assertIn("S098", codes)
+            self.assertIn("S099", codes)
+        with tempfile.TemporaryDirectory() as directory:
+            root = self.copy_site(directory)
+            page = root / "index.html"
+            page.write_text(
+                page.read_text(encoding="utf-8").replace(
+                    '<main id="main">',
+                    '<svg><image href="https://example.com/pixel"></image></svg><main id="main">',
+                    1,
+                ),
+                encoding="utf-8",
+            )
+            self.assertIn("S011", {finding.code for finding in check_site(root)})
+
+    def test_css_urls_and_unapproved_assets_are_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = self.copy_site(directory)
+            css = root / "assets" / "style.css"
+            css.write_text(
+                css.read_text(encoding="utf-8") + '\n.hidden { background: url("generated/font.woff2"); }\n',
+                encoding="utf-8",
+            )
+            (root / "assets" / "generated" / "font.woff2").write_bytes(b"not a font")
+            codes = {finding.code for finding in check_site(root)}
+            self.assertIn("S074", codes)
+            self.assertIn("S079", codes)
+        with tempfile.TemporaryDirectory() as directory:
+            root = self.copy_site(directory)
+            css = root / "assets" / "style.css"
+            css.write_text(
+                css.read_text(encoding="utf-8")
+                + '\n.hidden { background-image: image-set("generated/social-preview.webp" 1x); }\n',
+                encoding="utf-8",
+            )
+            self.assertIn("S074", {finding.code for finding in check_site(root)})
+
     def test_hidden_runtime_inputs_are_rejected_and_measured(self) -> None:
         with self.assertRaises(ValueError):
             local_target(ROOT, "index.html", "javascript:alert(1)")

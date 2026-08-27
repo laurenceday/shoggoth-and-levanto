@@ -8,7 +8,7 @@ site.
 Production prompt:
 
 > Create an original, cinematic vertical editorial illustration for a
-> cooperative AI-safety architecture site. At dawn in a quiet desert landscape,
+> cooperative AI-safety architecture site. At dawn in a quiet desert setting,
 > a lean silver geometric wildcat figure stands beside a monumental white
 > threshold arch. The wildcat calmly brings together two distinct luminous
 > streams, one electric blue and one warm gold. The streams meet and continue
@@ -24,7 +24,7 @@ Reference roles:
   proportions, angular ears, silver planes and yellow-eyed expression. No kit
   file or source image is present in this repository.
 - The supplied public-conversation screenshot and Levanto's public dawn motif
-  informed only the warm-light, arch, landscape and reflection vocabulary.
+  informed only the warm-light, arch, desert and reflection vocabulary.
   The final scene does not reproduce a Levanto logo, exact homepage image or
   page layout.
 - The cooperative architecture supplied the blue-and-gold streams: distinct
@@ -50,7 +50,7 @@ research site.
 
 Production prompt:
 
-> Make one cohesive 1200 × 630 landscape social-preview card for a cooperative
+> Make one cohesive 1200 × 630 wide-format social-preview card for a cooperative
 > AI-safety research site. Set the exact title “Shoggoth + Levanto” as large,
 > legible typography and the exact supporting line “A second opinion. Not a
 > second authority.” as smaller, legible typography. Match a refined
