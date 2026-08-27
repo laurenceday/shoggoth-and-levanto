@@ -36,6 +36,15 @@ ALLOWED_STATUSES = {
 UNSOURCED_STATUSES = {"proposed", "illustrative", "unknown"}
 FORBIDDEN_TAGS = {"script", "form", "iframe", "object", "embed"}
 IGNORED_DIRS = {".git", ".hexaemeron", ".elenchus", ".metron", ".venv", "__pycache__"}
+FORBIDDEN_SOURCE_DIRS = {
+    "mascot-imagegen-kit",
+    "mascot-imagegen-kit-main",
+    "shoggoth-vs-centaur",
+    "plaidcat",
+    "wildcat-finance-skills",
+    "levanto-agent-skill",
+}
+RUNTIME_SUFFIXES = {".js", ".mjs", ".cjs"}
 TEXT_SUFFIXES = {".html", ".css", ".md", ".json", ".py", ".txt", ".yml", ".yaml"}
 SOURCE_ID = re.compile(r"^[A-Z][A-Z0-9-]*$")
 PRIVATE_PATH = re.compile(
@@ -61,6 +70,7 @@ class PageParser(HTMLParser):
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
         self.ids: set[str] = set()
+        self.duplicate_ids: set[str] = set()
         self.hrefs: list[str] = []
         self.nav_hrefs: list[str] = []
         self.current_hrefs: list[str] = []
@@ -70,6 +80,8 @@ class PageParser(HTMLParser):
         self.statuses: list[str] = []
         self.editions: list[str] = []
         self.forbidden_tags: list[str] = []
+        self.runtime_attributes: list[str] = []
+        self.refresh_meta = False
         self.body_page: str | None = None
         self.nav_depth = 0
 
@@ -80,7 +92,13 @@ class PageParser(HTMLParser):
         if tag in FORBIDDEN_TAGS:
             self.forbidden_tags.append(tag)
         if values.get("id"):
-            self.ids.add(str(values["id"]))
+            identifier = str(values["id"])
+            if identifier in self.ids:
+                self.duplicate_ids.add(identifier)
+            self.ids.add(identifier)
+        self.runtime_attributes.extend(key for key in values if key.startswith("on"))
+        if tag == "meta" and (values.get("http-equiv") or "").lower() == "refresh":
+            self.refresh_meta = True
         href = values.get("href")
         if href is not None:
             self.hrefs.append(href)
@@ -152,9 +170,17 @@ def check_page_contract(root: Path, parsed: dict[str, PageParser], findings: lis
         expected_body = Path(name).stem
         if page.body_page != expected_body:
             findings.append(Finding("S010", name, f"body data-page must be {expected_body!r}"))
+        if page.duplicate_ids:
+            findings.append(Finding("S009", name, f"duplicate ids: {sorted(page.duplicate_ids)}"))
         if page.forbidden_tags:
             tags = ", ".join(sorted(set(page.forbidden_tags)))
             findings.append(Finding("S011", name, f"runtime tag present: {tags}"))
+        if page.runtime_attributes:
+            findings.append(
+                Finding("S021", name, f"runtime event attributes present: {sorted(set(page.runtime_attributes))}")
+            )
+        if page.refresh_meta:
+            findings.append(Finding("S022", name, "meta refresh is not accepted"))
         if len(page.stylesheets) != 1:
             findings.append(Finding("S012", name, "must load exactly one stylesheet"))
         else:
@@ -192,12 +218,26 @@ def check_page_contract(root: Path, parsed: dict[str, PageParser], findings: lis
                         raise ValueError
                 except ValueError:
                     findings.append(Finding("S020", name, f"image {src!r} lacks positive {field}"))
+            if src:
+                split = urlsplit(src)
+                if split.scheme or split.netloc or split.path.startswith("/"):
+                    findings.append(Finding("S023", name, f"image must be a local subpath-safe asset: {src}"))
+                else:
+                    target = (root / unquote(split.path)).resolve()
+                    if not target.is_relative_to(root) or not target.is_file() or target.is_symlink():
+                        findings.append(Finding("S024", name, f"image target is missing or unsafe: {src}"))
+                    elif target.suffix.lower() != ".webp":
+                        findings.append(Finding("S025", name, f"image must use WebP: {src}"))
 
 
 def local_target(root: Path, page_name: str, href: str) -> tuple[Path, str] | None:
     split = urlsplit(href)
-    if split.scheme or split.netloc or href.startswith("mailto:"):
+    if split.scheme:
+        if split.scheme.lower() not in {"http", "https", "mailto", "tel"}:
+            raise ValueError(f"unsupported URI scheme {split.scheme!r}")
         return None
+    if split.netloc:
+        raise ValueError("scheme-relative links are not accepted")
     if split.path.startswith("/"):
         raise ValueError("root-relative link is unsafe under a Pages subpath")
     raw_path = unquote(split.path)
@@ -263,8 +303,21 @@ def check_sources(root: Path, findings: list[Finding]) -> set[str]:
             if not isinstance(source.get(field), str) or not source[field].strip():
                 findings.append(Finding("S047", "evidence/sources.json", f"{source_id}.{field} is empty"))
         url = source.get("url")
-        if url is not None and (not isinstance(url, str) or urlsplit(url).scheme != "https"):
-            findings.append(Finding("S048", "evidence/sources.json", f"{source_id}.url must use HTTPS"))
+        if url is not None:
+            try:
+                split = urlsplit(url) if isinstance(url, str) else None
+            except ValueError:
+                split = None
+            if (
+                split is None
+                or split.scheme != "https"
+                or not split.netloc
+                or split.username is not None
+                or split.password is not None
+            ):
+                findings.append(
+                    Finding("S048", "evidence/sources.json", f"{source_id}.url must be an HTTPS URL without credentials")
+                )
         revision = source.get("revision")
         if revision is not None and (not isinstance(revision, str) or not revision.strip()):
             findings.append(Finding("S049", "evidence/sources.json", f"{source_id}.revision is invalid"))
@@ -349,6 +402,14 @@ def iter_text_files(root: Path):
 
 
 def check_repository_boundary(root: Path, findings: list[Finding]) -> None:
+    for path in sorted(root.rglob("*")):
+        relative = path.relative_to(root)
+        if any(part in IGNORED_DIRS for part in relative.parts):
+            continue
+        if path.is_dir() and path.name.casefold() in FORBIDDEN_SOURCE_DIRS:
+            findings.append(Finding("S077", str(relative), "upstream or reference source mirror is not accepted"))
+        if path.is_file() and path.suffix.lower() in RUNTIME_SUFFIXES:
+            findings.append(Finding("S078", str(relative), "runtime JavaScript file is not accepted"))
     for path, text in iter_text_files(root):
         relative = str(path.relative_to(root))
         if text is None:
@@ -411,6 +472,15 @@ def check_site(root: Path) -> list[Finding]:
     findings: list[Finding] = []
     if not root.is_dir():
         return [Finding("S000", str(root), "site root is not a directory")]
+    root_pages = {path.name for path in root.glob("*.html") if path.is_file()}
+    if root_pages != set(PAGES):
+        findings.append(
+            Finding(
+                "S004",
+                ".",
+                f"root page inventory mismatch; missing={sorted(set(PAGES) - root_pages)}, extra={sorted(root_pages - set(PAGES))}",
+            )
+        )
     parsed = parse_pages(root, findings)
     check_page_contract(root, parsed, findings)
     check_links(root, parsed, findings)

@@ -53,10 +53,10 @@ def run(root: Path, report_path: Path, verbosity: int = 2) -> tuple[bool, int]:
         sys.path.insert(0, root_text)
     try:
         suite = unittest.defaultTestLoader.discover(str(root / "tests"))
+        result = unittest.TextTestRunner(verbosity=verbosity).run(suite)
     finally:
         if inserted:
             sys.path.remove(root_text)
-    result = unittest.TextTestRunner(verbosity=verbosity).run(suite)
     report = {
         "schema": "elenchus.unittest.v1",
         "complete": True,

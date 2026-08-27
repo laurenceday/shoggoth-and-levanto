@@ -25,6 +25,8 @@ PAGES = (
     "engineering-primer.html",
     "sources.html",
 )
+IGNORED_DIRS = {".git", ".hexaemeron", ".elenchus", ".metron", ".venv", "__pycache__"}
+RUNTIME_SUFFIXES = {".js", ".mjs", ".cjs"}
 
 
 class ResourceParser(HTMLParser):
@@ -147,12 +149,21 @@ def measure(root: Path) -> dict[str, object]:
         if target not in seen:
             seen.add(target)
             first_load += target.stat().st_size
+    runtime_files = []
+    for path in sorted(root.rglob("*")):
+        relative = path.relative_to(root)
+        if any(part in IGNORED_DIRS for part in relative.parts):
+            continue
+        if path.is_file() and path.suffix.lower() in RUNTIME_SUFFIXES:
+            size = path.stat().st_size
+            runtime_files.append(size)
+            files.append({"path": str(relative), "bytes": size, "kind": "javascript"})
     measurements = {
         "site.max_html_bytes": max(html_sizes),
         "site.css_bytes": css_size,
         "site.max_webp_bytes": max(webp_sizes, default=0),
         "site.index_first_load_bytes": first_load,
-        "site.runtime_javascript_bytes": 0,
+        "site.runtime_javascript_bytes": sum(runtime_files),
     }
     return {
         "schema": "site-measurement-v1",
