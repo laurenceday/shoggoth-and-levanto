@@ -51,6 +51,7 @@ FORBIDDEN_TAGS = {
     "script",
     "source",
     "style",
+    "svg",
     "track",
     "video",
 }
@@ -496,8 +497,13 @@ def check_social_preview(
 def local_target(root: Path, page_name: str, href: str) -> tuple[Path, str] | None:
     split = urlsplit(href)
     if split.scheme:
-        if split.scheme.lower() not in {"https", "mailto", "tel"}:
+        scheme = split.scheme.lower()
+        if scheme not in {"https", "mailto", "tel"}:
             raise ValueError(f"unsupported URI scheme {split.scheme!r}")
+        if scheme == "https" and (
+            not split.netloc or split.username is not None or split.password is not None
+        ):
+            raise ValueError("HTTPS links require an authority and cannot contain credentials")
         return None
     if split.netloc:
         raise ValueError("scheme-relative links are not accepted")
@@ -687,7 +693,10 @@ def check_repository_boundary(root: Path, findings: list[Finding]) -> None:
         findings.append(Finding("S073", "assets/style.css", "shared stylesheet is missing"))
     else:
         css = css_path.read_text(encoding="utf-8")
-        if re.search(r"(?i)@import\b|url\s*\(", css):
+        if re.search(
+            r"(?i)@import\b|(?:url|(?:-webkit-)?image-set|cross-fade)\s*\(",
+            css,
+        ):
             findings.append(Finding("S074", "assets/style.css", "CSS imports and URL-bearing assets are not accepted"))
     forbidden_asset_suffixes = {".png", ".jpg", ".jpeg", ".gif", ".avif"}
     assets = root / "assets"

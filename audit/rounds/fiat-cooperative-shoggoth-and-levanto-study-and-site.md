@@ -67,3 +67,21 @@ Elenchus verdict: guarded
 | S2-R1-03 | medium | scripts/check_site.py; scripts/measure_site.py | CSS `url()` references and undeclared asset types could load bytes that the first-load measurement did not inventory. | fixed in this round |
 
 Leads not pursued: none
+
+## Step 2, round 2 -- 2026-08-27T18:18:43Z
+
+Audit schema: fiat-audit-round/v2
+
+Covered: authority-inversion=reviewed; status-collapse=reviewed; policy-drift=reviewed; confidence-misread=reviewed; service-failure=reviewed; schema-drift=reviewed; credential-leak=reviewed; content-egress=reviewed; diagnostic-retention=reviewed; prompt-injection=reviewed; source-drift=reviewed; skill-surface-divergence=reviewed; benchmark-overclaim=reviewed; endorsement-drift=reviewed; source-copying=reviewed; image-provenance=reviewed; image-cache-layout=reviewed; link-integrity=reviewed; page-accessibility=reviewed; asset-budget=reviewed; pages-publication=not-applicable; pages-cache=not-applicable; test-runner-contract=reviewed; hidden-runtime=reviewed
+
+Not checked: keyboard and print behaviour reserved for Step 3; live Pages publication and cache behaviour; a future Sage adapter's live network, schema and data handling
+
+Elenchus verdict: guarded
+
+| id | severity | file | finding | status |
+| --- | --- | --- | --- | --- |
+| S2-R2-01 | medium | scripts/check_site.py | Page links with an HTTPS scheme but no authority, or with embedded credentials, passed the HTML link boundary. | fixed in this round |
+| S2-R2-02 | medium | scripts/check_site.py | Inline SVG remained available as an unreviewed external-image and reuse surface despite the site's no-SVG design boundary. | fixed in this round |
+| S2-R2-03 | medium | scripts/check_site.py; scripts/measure_site.py | CSS `image-set()` could reference an allowed image without adding its bytes to the index first-load measurement. | fixed in this round |
+
+Leads not pursued: none
