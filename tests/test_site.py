@@ -1,12 +1,17 @@
 from __future__ import annotations
 
 import json
+import hashlib
+import os
 import shutil
 import tempfile
+import threading
 import time
 import unittest
+from http.server import ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import urlsplit
+from unittest.mock import patch
+from urllib.parse import urljoin, urlsplit
 
 from scripts.check_site import (
     ALLOWED_STATUSES,
@@ -33,12 +38,15 @@ from scripts.check_site import (
     parse_pages,
 )
 from scripts.measure_site import measure
-from scripts.demo_site import DEFAULT_BASE_PATH, run_demo, validate_base_path
+from scripts.demo_site import DEFAULT_BASE_PATH, LOOPBACK, handler_for, run_demo, validate_base_path
 from scripts.public_smoke import (
     PUBLIC_BASE_URL,
     PUBLIC_TARGETS,
     SmokeError,
+    TargetFailure,
     atomic_write_json as atomic_write_readback,
+    fetch_inventory,
+    main as public_smoke_main,
     readback_document,
     safe_output as safe_readback_output,
     validate_complete_readback,
@@ -483,21 +491,118 @@ class SiteContractTests(unittest.TestCase):
 
     def test_public_readback_refuses_stale_or_empty_results(self) -> None:
         records = [
-            {"target": target.path or "/", "status": 200, "bytes": 1}
+            {
+                "target": target.path or "/",
+                "url": urljoin(PUBLIC_BASE_URL, target.path),
+                "status": 200,
+                "content_type": target.content_type,
+                "bytes": len((ROOT / (target.path or "index.html")).read_bytes()),
+                "sha256": hashlib.sha256(
+                    (ROOT / (target.path or "index.html")).read_bytes()
+                ).hexdigest(),
+                "edition": "cooperative-v1" if target.html else None,
+                "local_match": True,
+            }
             for target in PUBLIC_TARGETS
         ]
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             output = safe_readback_output(root, ".hexaemeron/readback.json")
             document = readback_document(PUBLIC_BASE_URL, "cooperative-v1", records)
+            document["deployment_context"]["github_sha"] = "a" * 40
             atomic_write_readback(output, document)
-            self.assertTrue(validate_complete_readback(output, 0)["complete"])
+            self.assertTrue(
+                validate_complete_readback(output, 0, expected_root=ROOT)["complete"]
+            )
             with self.assertRaises(SmokeError):
-                validate_complete_readback(output, output.stat().st_mtime_ns + 1)
+                validate_complete_readback(
+                    output,
+                    output.stat().st_mtime_ns + 1,
+                    expected_root=ROOT,
+                )
             document["targets"] = []
             atomic_write_readback(output, document)
             with self.assertRaises(SmokeError):
-                validate_complete_readback(output, 0)
+                validate_complete_readback(output, 0, expected_root=ROOT)
+
+            document["targets"] = records
+            records[0]["content_type"] = "application/octet-stream"
+            atomic_write_readback(output, document)
+            with self.assertRaises(SmokeError):
+                validate_complete_readback(output, 0, expected_root=ROOT)
+
+            records[0]["content_type"] = PUBLIC_TARGETS[0].content_type
+            document["deployment_context"]["github_sha"] = None
+            atomic_write_readback(output, document)
+            with self.assertRaises(SmokeError):
+                validate_complete_readback(output, 0, expected_root=ROOT)
+
+            document["deployment_context"]["github_sha"] = "a" * 40
+            document["checked_at_utc"] = "2000-01-01T00:00:00Z"
+            freshness_start = time.time_ns()
+            atomic_write_readback(output, document)
+            with self.assertRaises(SmokeError):
+                validate_complete_readback(
+                    output,
+                    freshness_start,
+                    expected_root=ROOT,
+                )
+
+    def test_public_smoke_rejects_same_edition_stale_bytes(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            stale_root = self.copy_site(directory)
+            stale_page = stale_root / "sage.html"
+            stale_page.write_text(stale_page.read_text(encoding="utf-8") + "\n", encoding="utf-8")
+            server = ThreadingHTTPServer(
+                (LOOPBACK, 0),
+                handler_for(stale_root, DEFAULT_BASE_PATH),
+            )
+            server.daemon_threads = True
+            port = int(server.server_address[1])
+            worker = threading.Thread(target=server.serve_forever, daemon=True)
+            worker.start()
+            try:
+                with self.assertRaises(TargetFailure) as caught:
+                    fetch_inventory(
+                        f"http://{LOOPBACK}:{port}{DEFAULT_BASE_PATH}",
+                        "cooperative-v1",
+                        expected_root=ROOT,
+                        maximum_redirects=0,
+                    )
+                self.assertEqual(
+                    caught.exception.target,
+                    "sage.html",
+                    msg=caught.exception.detail,
+                )
+                self.assertIn("public bytes differ", caught.exception.detail)
+                self.assertEqual(
+                    [record["target"] for record in caught.exception.records],
+                    ["/"],
+                )
+            finally:
+                server.shutdown()
+                server.server_close()
+                worker.join(timeout=5)
+
+    def test_public_smoke_bounds_output_filesystem_errors(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            blocked_output = Path(directory) / "readback.json"
+            blocked_output.mkdir()
+            with (
+                patch("scripts.public_smoke.safe_output", return_value=blocked_output),
+                patch.dict(os.environ, {"GITHUB_SHA": "a" * 40}, clear=False),
+            ):
+                result = public_smoke_main(
+                    [
+                        "--base-url",
+                        PUBLIC_BASE_URL,
+                        "--expected-edition",
+                        "cooperative-v1",
+                        "--out",
+                        ".hexaemeron/readback.json",
+                    ]
+                )
+            self.assertEqual(result, 2)
 
     def test_report_writer_replaces_stale_bytes_with_exact_schema(self) -> None:
         report = {
