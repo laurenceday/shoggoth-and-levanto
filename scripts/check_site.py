@@ -1,0 +1,447 @@
+#!/usr/bin/env python3
+"""Check the static site, its evidence registries and local asset boundary."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import re
+import sys
+from dataclasses import dataclass
+from html.parser import HTMLParser
+from pathlib import Path
+from urllib.parse import unquote, urlsplit
+
+
+PAGES = (
+    "index.html",
+    "sage.html",
+    "shoggoth.html",
+    "handoffs.html",
+    "architecture.html",
+    "policy.html",
+    "pilot.html",
+    "limits.html",
+    "engineering-primer.html",
+    "sources.html",
+)
+ALLOWED_STATUSES = {
+    "current",
+    "vendor-reported",
+    "inferred",
+    "proposed",
+    "illustrative",
+    "unknown",
+}
+UNSOURCED_STATUSES = {"proposed", "illustrative", "unknown"}
+FORBIDDEN_TAGS = {"script", "form", "iframe", "object", "embed"}
+IGNORED_DIRS = {".git", ".hexaemeron", ".elenchus", ".metron", ".venv", "__pycache__"}
+TEXT_SUFFIXES = {".html", ".css", ".md", ".json", ".py", ".txt", ".yml", ".yaml"}
+SOURCE_ID = re.compile(r"^[A-Z][A-Z0-9-]*$")
+PRIVATE_PATH = re.compile(
+    r"(?:file:" r"//|/Us" r"ers/|/var/fol" r"ders/|/private/v" r"ar/|/t" r"mp/)"
+)
+CREDENTIAL = re.compile(
+    r"(?i)(?:\bbearer\s+[A-Za-z0-9._~-]{24,}|\bgh[pousr]_[A-Za-z0-9]{20,}"
+    r"|\bsk-[A-Za-z0-9]{20,}|\bsage_(?:live|test)_[A-Za-z0-9]{16,})"
+)
+
+
+@dataclass(frozen=True, order=True)
+class Finding:
+    code: str
+    path: str
+    detail: str
+
+    def render(self) -> str:
+        return f"{self.code} {self.path}: {self.detail}"
+
+
+class PageParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.ids: set[str] = set()
+        self.hrefs: list[str] = []
+        self.nav_hrefs: list[str] = []
+        self.current_hrefs: list[str] = []
+        self.stylesheets: list[str] = []
+        self.images: list[dict[str, str]] = []
+        self.claims: list[tuple[str, str | None]] = []
+        self.statuses: list[str] = []
+        self.editions: list[str] = []
+        self.forbidden_tags: list[str] = []
+        self.body_page: str | None = None
+        self.nav_depth = 0
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        values = {key: value for key, value in attrs}
+        if tag == "nav":
+            self.nav_depth += 1
+        if tag in FORBIDDEN_TAGS:
+            self.forbidden_tags.append(tag)
+        if values.get("id"):
+            self.ids.add(str(values["id"]))
+        href = values.get("href")
+        if href is not None:
+            self.hrefs.append(href)
+            if self.nav_depth and tag == "a":
+                self.nav_hrefs.append(href)
+                if values.get("aria-current") == "page":
+                    self.current_hrefs.append(href)
+        if tag == "link" and "stylesheet" in (values.get("rel") or "").split():
+            if href is not None:
+                self.stylesheets.append(href)
+        if tag == "img":
+            self.images.append({key: value or "" for key, value in attrs})
+        claim = values.get("data-claim")
+        if claim:
+            self.claims.append((claim, values.get("data-status")))
+        status = values.get("data-status")
+        if status:
+            self.statuses.append(status)
+        edition = values.get("data-edition")
+        if edition:
+            self.editions.append(edition)
+        if tag == "body":
+            self.body_page = values.get("data-page")
+
+    def handle_startendtag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        self.handle_starttag(tag, attrs)
+        if tag == "nav" and self.nav_depth:
+            self.nav_depth -= 1
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag == "nav" and self.nav_depth:
+            self.nav_depth -= 1
+
+
+def load_json(path: Path, findings: list[Finding], code: str) -> object | None:
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        findings.append(Finding(code, path.name, f"cannot read valid UTF-8 JSON: {exc}"))
+        return None
+
+
+def parse_pages(root: Path, findings: list[Finding]) -> dict[str, PageParser]:
+    parsed: dict[str, PageParser] = {}
+    for name in PAGES:
+        path = root / name
+        if not path.is_file() or path.is_symlink():
+            findings.append(Finding("S001", name, "required regular page is missing"))
+            continue
+        try:
+            text = path.read_text(encoding="utf-8")
+        except (OSError, UnicodeError) as exc:
+            findings.append(Finding("S002", name, f"cannot read UTF-8 page: {exc}"))
+            continue
+        parser = PageParser()
+        try:
+            parser.feed(text)
+            parser.close()
+        except Exception as exc:
+            findings.append(Finding("S003", name, f"HTML parser refused the page: {exc}"))
+            continue
+        parsed[name] = parser
+    return parsed
+
+
+def check_page_contract(root: Path, parsed: dict[str, PageParser], findings: list[Finding]) -> None:
+    required_nav = set(PAGES)
+    for name, page in parsed.items():
+        expected_body = Path(name).stem
+        if page.body_page != expected_body:
+            findings.append(Finding("S010", name, f"body data-page must be {expected_body!r}"))
+        if page.forbidden_tags:
+            tags = ", ".join(sorted(set(page.forbidden_tags)))
+            findings.append(Finding("S011", name, f"runtime tag present: {tags}"))
+        if len(page.stylesheets) != 1:
+            findings.append(Finding("S012", name, "must load exactly one stylesheet"))
+        else:
+            split = urlsplit(page.stylesheets[0])
+            if split.path != "assets/style.css" or not split.query:
+                findings.append(
+                    Finding("S013", name, "stylesheet must be assets/style.css with a version query")
+                )
+        local_nav = {
+            urlsplit(href).path
+            for href in page.nav_hrefs
+            if not urlsplit(href).scheme and urlsplit(href).path.endswith(".html")
+        }
+        if local_nav != required_nav:
+            missing = sorted(required_nav - local_nav)
+            extra = sorted(local_nav - required_nav)
+            findings.append(
+                Finding("S014", name, f"navigation mismatch; missing={missing}, extra={extra}")
+            )
+        if page.current_hrefs != [name]:
+            findings.append(Finding("S015", name, f"aria-current must point only to {name}"))
+        if "proposed" not in page.statuses:
+            findings.append(Finding("S016", name, "explicit proposed status is missing"))
+        if page.editions != ["cooperative-v1"]:
+            findings.append(Finding("S017", name, "footer must carry edition cooperative-v1 once"))
+        for image in page.images:
+            src = image.get("src", "")
+            if not src:
+                findings.append(Finding("S018", name, "image has no src"))
+            if not image.get("alt"):
+                findings.append(Finding("S019", name, f"image {src!r} has no alt text"))
+            for field in ("width", "height"):
+                try:
+                    if int(image.get(field, "0")) <= 0:
+                        raise ValueError
+                except ValueError:
+                    findings.append(Finding("S020", name, f"image {src!r} lacks positive {field}"))
+
+
+def local_target(root: Path, page_name: str, href: str) -> tuple[Path, str] | None:
+    split = urlsplit(href)
+    if split.scheme or split.netloc or href.startswith("mailto:"):
+        return None
+    if split.path.startswith("/"):
+        raise ValueError("root-relative link is unsafe under a Pages subpath")
+    raw_path = unquote(split.path)
+    relative = Path(page_name).parent / (raw_path or page_name)
+    target = (root / relative).resolve()
+    if not target.is_relative_to(root):
+        raise ValueError("link leaves the site root")
+    return target, unquote(split.fragment)
+
+
+def check_links(root: Path, parsed: dict[str, PageParser], findings: list[Finding]) -> None:
+    for name, page in parsed.items():
+        for href in page.hrefs:
+            if not href or href.startswith(("mailto:", "tel:")):
+                continue
+            try:
+                target_info = local_target(root, name, href)
+            except ValueError as exc:
+                findings.append(Finding("S030", name, f"{href!r}: {exc}"))
+                continue
+            if target_info is None:
+                continue
+            target, fragment = target_info
+            if not target.is_file() or target.is_symlink():
+                findings.append(Finding("S031", name, f"local target does not exist: {href}"))
+                continue
+            if fragment and target.suffix.lower() == ".html":
+                target_name = str(target.relative_to(root))
+                target_page = parsed.get(target_name)
+                if target_page is None or fragment not in target_page.ids:
+                    findings.append(Finding("S032", name, f"fragment does not exist: {href}"))
+
+
+def check_sources(root: Path, findings: list[Finding]) -> set[str]:
+    path = root / "evidence" / "sources.json"
+    document = load_json(path, findings, "S040")
+    if not isinstance(document, dict):
+        return set()
+    if document.get("schema") != "source-registry-v1":
+        findings.append(Finding("S041", "evidence/sources.json", "unsupported schema"))
+    edition = document.get("edition")
+    if not isinstance(edition, dict) or edition.get("name") != "cooperative-v1":
+        findings.append(Finding("S042", "evidence/sources.json", "edition is not cooperative-v1"))
+    sources = document.get("sources")
+    if not isinstance(sources, list) or not sources:
+        findings.append(Finding("S043", "evidence/sources.json", "sources must be a non-empty list"))
+        return set()
+    ids: set[str] = set()
+    required = {"id", "title", "kind", "role", "url", "revision", "observed_at", "note"}
+    for index, source in enumerate(sources):
+        label = f"source[{index}]"
+        if not isinstance(source, dict) or set(source) != required:
+            findings.append(Finding("S044", "evidence/sources.json", f"{label} has wrong fields"))
+            continue
+        source_id = source.get("id")
+        if not isinstance(source_id, str) or not SOURCE_ID.fullmatch(source_id):
+            findings.append(Finding("S045", "evidence/sources.json", f"{label} has invalid id"))
+            continue
+        if source_id in ids:
+            findings.append(Finding("S046", "evidence/sources.json", f"duplicate id {source_id}"))
+        ids.add(source_id)
+        for field in ("title", "kind", "role", "observed_at", "note"):
+            if not isinstance(source.get(field), str) or not source[field].strip():
+                findings.append(Finding("S047", "evidence/sources.json", f"{source_id}.{field} is empty"))
+        url = source.get("url")
+        if url is not None and (not isinstance(url, str) or urlsplit(url).scheme != "https"):
+            findings.append(Finding("S048", "evidence/sources.json", f"{source_id}.url must use HTTPS"))
+        revision = source.get("revision")
+        if revision is not None and (not isinstance(revision, str) or not revision.strip()):
+            findings.append(Finding("S049", "evidence/sources.json", f"{source_id}.revision is invalid"))
+    return ids
+
+
+def check_claims(
+    root: Path,
+    parsed: dict[str, PageParser],
+    source_ids: set[str],
+    findings: list[Finding],
+) -> None:
+    path = root / "evidence" / "claims.json"
+    document = load_json(path, findings, "S050")
+    if not isinstance(document, dict):
+        return
+    if document.get("schema") != "claim-registry-v1" or document.get("edition") != "cooperative-v1":
+        findings.append(Finding("S051", "evidence/claims.json", "schema or edition is wrong"))
+    statuses = document.get("statuses")
+    if not isinstance(statuses, list) or set(statuses) != ALLOWED_STATUSES or len(statuses) != len(ALLOWED_STATUSES):
+        findings.append(Finding("S052", "evidence/claims.json", "status vocabulary is incomplete or duplicated"))
+    claims = document.get("claims")
+    if not isinstance(claims, list) or not claims:
+        findings.append(Finding("S053", "evidence/claims.json", "claims must be a non-empty list"))
+        return
+    registry: dict[str, dict[str, object]] = {}
+    required = {"id", "page", "status", "source_ids", "summary"}
+    for index, claim in enumerate(claims):
+        if not isinstance(claim, dict) or set(claim) != required:
+            findings.append(Finding("S054", "evidence/claims.json", f"claim[{index}] has wrong fields"))
+            continue
+        claim_id = claim.get("id")
+        if not isinstance(claim_id, str) or not SOURCE_ID.fullmatch(claim_id):
+            findings.append(Finding("S055", "evidence/claims.json", f"claim[{index}] has invalid id"))
+            continue
+        if claim_id in registry:
+            findings.append(Finding("S056", "evidence/claims.json", f"duplicate id {claim_id}"))
+        registry[claim_id] = claim
+        page = claim.get("page")
+        status = claim.get("status")
+        refs = claim.get("source_ids")
+        if page not in PAGES:
+            findings.append(Finding("S057", "evidence/claims.json", f"{claim_id} names unknown page"))
+        if status not in ALLOWED_STATUSES:
+            findings.append(Finding("S058", "evidence/claims.json", f"{claim_id} has unknown status"))
+        if not isinstance(refs, list) or any(not isinstance(ref, str) for ref in refs):
+            findings.append(Finding("S059", "evidence/claims.json", f"{claim_id}.source_ids is invalid"))
+            refs = []
+        unknown = sorted(set(refs) - source_ids)
+        if unknown:
+            findings.append(Finding("S060", "evidence/claims.json", f"{claim_id} has unknown sources {unknown}"))
+        if status not in UNSOURCED_STATUSES and not refs:
+            findings.append(Finding("S061", "evidence/claims.json", f"{claim_id} requires a source"))
+        if not isinstance(claim.get("summary"), str) or not str(claim["summary"]).strip():
+            findings.append(Finding("S062", "evidence/claims.json", f"{claim_id}.summary is empty"))
+    seen: set[str] = set()
+    for page_name, page in parsed.items():
+        for claim_id, html_status in page.claims:
+            claim = registry.get(claim_id)
+            if claim is None:
+                findings.append(Finding("S063", page_name, f"unknown claim id {claim_id}"))
+                continue
+            seen.add(claim_id)
+            if claim.get("page") != page_name:
+                findings.append(Finding("S064", page_name, f"claim {claim_id} belongs to {claim.get('page')}"))
+            if html_status != claim.get("status"):
+                findings.append(Finding("S065", page_name, f"claim {claim_id} status does not match registry"))
+    missing = sorted(set(registry) - seen)
+    if missing:
+        findings.append(Finding("S066", "evidence/claims.json", f"claims absent from pages: {missing}"))
+
+
+def iter_text_files(root: Path):
+    for path in sorted(root.rglob("*")):
+        relative = path.relative_to(root)
+        if any(part in IGNORED_DIRS for part in relative.parts):
+            continue
+        if path.is_symlink():
+            yield path, None
+        elif path.is_file() and path.suffix.lower() in TEXT_SUFFIXES:
+            yield path, path.read_text(encoding="utf-8")
+
+
+def check_repository_boundary(root: Path, findings: list[Finding]) -> None:
+    for path, text in iter_text_files(root):
+        relative = str(path.relative_to(root))
+        if text is None:
+            findings.append(Finding("S070", relative, "symbolic links are not accepted"))
+            continue
+        if PRIVATE_PATH.search(text):
+            findings.append(Finding("S071", relative, "private absolute path is present"))
+        if CREDENTIAL.search(text):
+            findings.append(Finding("S072", relative, "credential-shaped value is present"))
+    css_path = root / "assets" / "style.css"
+    if not css_path.is_file() or css_path.is_symlink():
+        findings.append(Finding("S073", "assets/style.css", "shared stylesheet is missing"))
+    else:
+        css = css_path.read_text(encoding="utf-8")
+        if re.search(r"(?i)@import\b|url\(\s*['\"]?https?://", css):
+            findings.append(Finding("S074", "assets/style.css", "remote CSS asset is present"))
+    forbidden_asset_suffixes = {".png", ".jpg", ".jpeg", ".gif", ".avif"}
+    assets = root / "assets"
+    if assets.is_dir():
+        for path in assets.rglob("*"):
+            if path.is_file() and path.suffix.lower() in forbidden_asset_suffixes:
+                findings.append(Finding("S075", str(path.relative_to(root)), "asset format is not approved"))
+
+
+def check_budgets(root: Path, findings: list[Finding]) -> None:
+    expected = {
+        "site.max_html_bytes": 102400,
+        "site.css_bytes": 24576,
+        "site.max_webp_bytes": 204800,
+        "site.index_first_load_bytes": 358400,
+        "site.runtime_javascript_bytes": 0,
+    }
+    document = load_json(root / "evidence" / "metron-budgets.json", findings, "S080")
+    if not isinstance(document, dict) or not isinstance(document.get("budgets"), list):
+        findings.append(Finding("S081", "evidence/metron-budgets.json", "budget list is missing"))
+        return
+    observed: dict[str, object] = {}
+    required = {"name", "unit", "limit", "variance", "direction"}
+    for entry in document["budgets"]:
+        if not isinstance(entry, dict) or set(entry) != required:
+            findings.append(Finding("S082", "evidence/metron-budgets.json", "budget fields are wrong"))
+            continue
+        observed[str(entry.get("name"))] = entry.get("limit")
+    if observed != expected:
+        findings.append(Finding("S083", "evidence/metron-budgets.json", "budget names or limits drifted"))
+    for name in PAGES:
+        path = root / name
+        if path.is_file() and path.stat().st_size > expected["site.max_html_bytes"]:
+            findings.append(Finding("S084", name, "HTML byte budget exceeded"))
+    css_path = root / "assets" / "style.css"
+    if css_path.is_file() and css_path.stat().st_size > expected["site.css_bytes"]:
+        findings.append(Finding("S085", "assets/style.css", "CSS byte budget exceeded"))
+    for path in (root / "assets").rglob("*.webp") if (root / "assets").is_dir() else []:
+        if path.stat().st_size > expected["site.max_webp_bytes"]:
+            findings.append(Finding("S086", str(path.relative_to(root)), "WebP byte budget exceeded"))
+
+
+def check_site(root: Path) -> list[Finding]:
+    root = root.resolve()
+    findings: list[Finding] = []
+    if not root.is_dir():
+        return [Finding("S000", str(root), "site root is not a directory")]
+    parsed = parse_pages(root, findings)
+    check_page_contract(root, parsed, findings)
+    check_links(root, parsed, findings)
+    source_ids = check_sources(root, findings)
+    check_claims(root, parsed, source_ids, findings)
+    try:
+        check_repository_boundary(root, findings)
+    except (OSError, UnicodeError) as exc:
+        findings.append(Finding("S076", ".", f"repository boundary read failed: {exc}"))
+    check_budgets(root, findings)
+    return sorted(set(findings))
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--root", default=".", help="site root")
+    return parser
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = build_parser().parse_args(argv)
+    root = Path(args.root)
+    findings = check_site(root)
+    if findings:
+        for finding in findings:
+            print(f"ERROR {finding.render()}", file=sys.stderr)
+        print(f"site check failed: {len(findings)} finding(s)", file=sys.stderr)
+        return 1
+    print(f"site check clean: {len(PAGES)} pages")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

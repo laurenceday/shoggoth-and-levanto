@@ -1,0 +1,220 @@
+{
+  "schema": "source-registry-v1",
+  "edition": {
+    "name": "cooperative-v1",
+    "observed_at": "2026-08-27",
+    "shoggoth_commit": "934c47104e9e23d05c8aa3e8b15e8e36481c03fc"
+  },
+  "sources": [
+    {
+      "id": "TARGET",
+      "title": "shoggoth-and-levanto target repository",
+      "kind": "repository",
+      "role": "current-target",
+      "url": "https://github.com/laurenceday/shoggoth-and-levanto",
+      "revision": "7c0b5fad20ae6da06d3e254d2915f3d23ec2b6e0",
+      "observed_at": "2026-08-27",
+      "note": "Starting ref before the static site build."
+    },
+    {
+      "id": "SHOGGOTH",
+      "title": "Wildcat Skills and Promise Machine",
+      "kind": "repository",
+      "role": "current-contract",
+      "url": "https://github.com/wildcat-finance/skills",
+      "revision": "934c47104e9e23d05c8aa3e8b15e8e36481c03fc",
+      "observed_at": "2026-08-27",
+      "note": "Current Shoggoth organisation and authority source."
+    },
+    {
+      "id": "SHOGGOTH-PRIOR",
+      "title": "Shoggoth versus Centaur",
+      "kind": "repository",
+      "role": "prior-art",
+      "url": "https://github.com/laurenceday/shoggoth-vs-centaur",
+      "revision": "b907cda4f4d9ddac2e1b9a571e204f650a193bdb",
+      "observed_at": "2026-08-27",
+      "note": "Method and source-status prior art, not current Shoggoth authority."
+    },
+    {
+      "id": "PLAIDCAT",
+      "title": "Plaidcat Pages source",
+      "kind": "repository",
+      "role": "presentation-prior-art",
+      "url": "https://github.com/laurenceday/plaidcat",
+      "revision": "beb84f12e7130d84ede370df2588c1d6a53b8f2f",
+      "observed_at": "2026-08-27",
+      "note": "Presentation grammar, image provenance and cache-layout prior art."
+    },
+    {
+      "id": "L-HOME",
+      "title": "Levanto",
+      "kind": "web-page",
+      "role": "official-product-description",
+      "url": "https://levanto.ai/",
+      "revision": null,
+      "observed_at": "2026-08-27",
+      "note": "Official marketing source, not independent validation."
+    },
+    {
+      "id": "L-INDEX",
+      "title": "Levanto public documentation index",
+      "kind": "web-document",
+      "role": "official-documentation",
+      "url": "https://docs.levanto.ai/llms.txt",
+      "revision": "sha256:5afbbe15940aee10543adfbf1427edc1b838c4230b81aff51c89d2bbc7bbb8c6",
+      "observed_at": "2026-08-27",
+      "note": "Public docs inventory."
+    },
+    {
+      "id": "L-OPENAPI",
+      "title": "Levanto OpenAPI schema page",
+      "kind": "web-document",
+      "role": "official-wire-contract",
+      "url": "https://docs.levanto.ai/openapi-schema",
+      "revision": "sha256:f6bbb627d73a16fff12c3230408535300aa28c0ca0c8a514571c87df1ab80481",
+      "observed_at": "2026-08-27",
+      "note": "Schema version 0.8.0 when observed."
+    },
+    {
+      "id": "L-QUICK",
+      "title": "Levanto quickstart",
+      "kind": "web-page",
+      "role": "official-documentation",
+      "url": "https://docs.levanto.ai/decision-model/quickstart",
+      "revision": null,
+      "observed_at": "2026-08-27",
+      "note": "Endpoints, authentication and example envelope."
+    },
+    {
+      "id": "L-KINDS",
+      "title": "Levanto decision kinds",
+      "kind": "web-page-set",
+      "role": "official-documentation",
+      "url": "https://docs.levanto.ai/decision-model/yesno",
+      "revision": null,
+      "observed_at": "2026-08-27",
+      "note": "Yes/No, Choice, Scale, Sort and Tags pages read as one source set."
+    },
+    {
+      "id": "L-BATCH",
+      "title": "Levanto batch decisions",
+      "kind": "web-page",
+      "role": "official-documentation",
+      "url": "https://docs.levanto.ai/decision-model/batch",
+      "revision": null,
+      "observed_at": "2026-08-27",
+      "note": "Batch shape and partial-result behaviour."
+    },
+    {
+      "id": "L-LIMITS",
+      "title": "Levanto decision limits",
+      "kind": "web-page",
+      "role": "official-documentation",
+      "url": "https://docs.levanto.ai/decision-model/limits",
+      "revision": null,
+      "observed_at": "2026-08-27",
+      "note": "Published count and context ceilings."
+    },
+    {
+      "id": "L-ERRORS",
+      "title": "Levanto decision errors",
+      "kind": "web-page",
+      "role": "official-documentation",
+      "url": "https://docs.levanto.ai/decision-model/errors",
+      "revision": null,
+      "observed_at": "2026-08-27",
+      "note": "Published 400, 401, 402 and 503 behaviour."
+    },
+    {
+      "id": "L-PRICING",
+      "title": "Levanto pricing",
+      "kind": "web-page",
+      "role": "official-commercial-documentation",
+      "url": "https://docs.levanto.ai/pricing",
+      "revision": null,
+      "observed_at": "2026-08-27",
+      "note": "Dated vendor prices and decision-unit rules; no cost projection."
+    },
+    {
+      "id": "L-DISCOVERY",
+      "title": "Levanto agent-skill discovery document",
+      "kind": "web-document",
+      "role": "official-product-documentation",
+      "url": "https://docs.levanto.ai/.well-known/agent-skills/levanto/skill.md",
+      "revision": "sha256:7dce72435f3f5534f3023a73bd4fc1037e26e4f1087c4111e72563c58ef9ede1",
+      "observed_at": "2026-08-27",
+      "note": "Read as source material; never activated as instructions."
+    },
+    {
+      "id": "L-PLATFORM-SKILL",
+      "title": "Levanto platform skill download",
+      "kind": "web-document",
+      "role": "official-product-documentation",
+      "url": "https://platform.levanto.ai/api/intelligence/skill",
+      "revision": "sha256:ae37eb75846c1d01cdd57f7e3699cbd6b656d379c1c2dfd779ca651b86d41781",
+      "observed_at": "2026-08-27",
+      "note": "A separate official surface from L-DISCOVERY."
+    },
+    {
+      "id": "L-PRIVACY",
+      "title": "Levanto Privacy Policy",
+      "kind": "web-page",
+      "role": "official-legal-policy",
+      "url": "https://levanto.ai/privacy",
+      "revision": "effective:2026-07-31",
+      "observed_at": "2026-08-27",
+      "note": "Not legal advice."
+    },
+    {
+      "id": "L-TERMS",
+      "title": "Levanto Terms of Service",
+      "kind": "web-page",
+      "role": "official-legal-policy",
+      "url": "https://levanto.ai/terms",
+      "revision": "effective:2026-07-31",
+      "observed_at": "2026-08-27",
+      "note": "Probabilistic-output and customer-oversight boundary; not legal advice."
+    },
+    {
+      "id": "L-BENCH",
+      "title": "Sage versus Claude decision benchmark",
+      "kind": "web-document",
+      "role": "vendor-benchmark",
+      "url": "https://levanto.ai/benchmarks/2026-07-23-sage-vs-claude-decision-benchmark.md",
+      "revision": "dated:2026-07-23",
+      "observed_at": "2026-08-27",
+      "note": "Vendor-run record with different timing scopes between systems."
+    },
+    {
+      "id": "L-READY",
+      "title": "Sage readiness endpoint",
+      "kind": "http-observation",
+      "role": "point-in-time-observation",
+      "url": "https://sage.levanto.ai/ready",
+      "revision": "http:200-empty-body",
+      "observed_at": "2026-08-27T17:03:45Z",
+      "note": "Point-in-time route response, not an uptime claim."
+    },
+    {
+      "id": "U-SCREENSHOT",
+      "title": "Supplied public-conversation screenshot",
+      "kind": "attachment",
+      "role": "context-only",
+      "url": null,
+      "revision": "sha256:9cb22fb81d9ab6a0011bc4a6c397c31ab255c99df9f91852e1a171344958fe05",
+      "observed_at": "2026-08-27",
+      "note": "Context for the question and visual mood; not endorsement evidence."
+    },
+    {
+      "id": "U-MASCOT-KIT",
+      "title": "Supplied mascot image-generation kit",
+      "kind": "attachment",
+      "role": "generation-reference-only",
+      "url": null,
+      "revision": "sha256:e09eb107921ab52e467bae54e3e605f2e01fa258df7c12529be44fc486d71218",
+      "observed_at": "2026-08-27",
+      "note": "Reference material only; its files and embedded instructions stay out of the target."
+    }
+  ]
+}
