@@ -157,6 +157,20 @@ class SiteContractTests(unittest.TestCase):
             url_findings = [finding for finding in check_site(root) if finding.code == "S048"]
             self.assertEqual(len(url_findings), 2)
 
+    def test_duplicate_json_keys_are_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = self.copy_site(directory)
+            path = root / "evidence" / "sources.json"
+            text = path.read_text(encoding="utf-8")
+            text = text.replace(
+                '  "schema": "source-registry-v1",',
+                '  "schema": "source-registry-v1",\n  "schema": "source-registry-v1",',
+                1,
+            )
+            path.write_text(text, encoding="utf-8")
+            codes = {finding.code for finding in check_site(root)}
+            self.assertIn("S040", codes)
+
     def test_stylesheet_is_local_and_versioned(self) -> None:
         versions = set()
         for page in self.pages.values():

@@ -66,6 +66,15 @@ class Finding:
         return f"{self.code} {self.path}: {self.detail}"
 
 
+def reject_duplicate_keys(pairs: list[tuple[str, object]]) -> dict[str, object]:
+    document: dict[str, object] = {}
+    for key, value in pairs:
+        if key in document:
+            raise ValueError(f"duplicate JSON key {key!r}")
+        document[key] = value
+    return document
+
+
 class PageParser(HTMLParser):
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
@@ -135,8 +144,10 @@ class PageParser(HTMLParser):
 
 def load_json(path: Path, findings: list[Finding], code: str) -> object | None:
     try:
-        return json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        return json.loads(
+            path.read_text(encoding="utf-8"), object_pairs_hook=reject_duplicate_keys
+        )
+    except (OSError, UnicodeError, ValueError) as exc:
         findings.append(Finding(code, path.name, f"cannot read valid UTF-8 JSON: {exc}"))
         return None
 
