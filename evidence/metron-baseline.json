@@ -1,0 +1,12 @@
+{
+  "schema": "site-baseline-v1",
+  "accepted_at": "2026-08-27",
+  "producer": "scripts/measure_site.py",
+  "measurements": {
+    "site.css_bytes": 20017,
+    "site.index_first_load_bytes": 103956,
+    "site.max_html_bytes": 13810,
+    "site.max_webp_bytes": 74006,
+    "site.runtime_javascript_bytes": 0
+  }
+}

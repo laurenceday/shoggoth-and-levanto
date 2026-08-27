@@ -89,6 +89,7 @@ SOCIAL_WIDTH = 1200
 SOCIAL_HEIGHT = 630
 SOCIAL_BYTES = 60100
 SOCIAL_SHA256 = "7af8236616704a7af887cf383ded9e5001e2ca38c16f40fdea7051c4973d32e1"
+CSS_VERSION = "v=20260827-4"
 
 
 @dataclass(frozen=True, order=True)
@@ -268,9 +269,13 @@ def check_page_contract(root: Path, parsed: dict[str, PageParser], findings: lis
             findings.append(Finding("S012", name, "must load exactly one stylesheet"))
         else:
             split = urlsplit(page.stylesheets[0])
-            if split.path != "assets/style.css" or not split.query:
+            if split.path != "assets/style.css" or split.query != CSS_VERSION:
                 findings.append(
-                    Finding("S013", name, "stylesheet must be assets/style.css with a version query")
+                    Finding(
+                        "S013",
+                        name,
+                        f"stylesheet must be assets/style.css?{CSS_VERSION}",
+                    )
                 )
         local_nav = {
             urlsplit(href).path
@@ -762,6 +767,69 @@ def check_budgets(root: Path, findings: list[Finding]) -> None:
             findings.append(Finding("S089", ".", f"{name} exceeds {limit}; observed {value}"))
 
 
+def check_delivery_contract(
+    root: Path,
+    parsed: dict[str, PageParser],
+    findings: list[Finding],
+) -> None:
+    css_path = root / "assets" / "style.css"
+    try:
+        css = css_path.read_text(encoding="utf-8")
+    except (OSError, UnicodeError) as exc:
+        findings.append(Finding("S100", "assets/style.css", f"cannot inspect delivery CSS: {exc}"))
+        return
+    required_css = {
+        "a:focus-visible": "keyboard focus rule",
+        "@media (prefers-reduced-motion: reduce)": "reduced-motion rule",
+        "animation-duration: 0.01ms !important": "bounded animation duration",
+        "@media print": "print rule",
+        ".data-table-wrap {\n    overflow: visible;": "print table overflow rule",
+    }
+    for marker, label in required_css.items():
+        if marker not in css:
+            findings.append(Finding("S101", "assets/style.css", f"missing {label}"))
+
+    for name, page in parsed.items():
+        if page.stylesheets != [f"assets/style.css?{CSS_VERSION}"]:
+            findings.append(Finding("S102", name, "page does not bind the accepted CSS edition"))
+
+    baseline_path = root / "evidence" / "metron-baseline.json"
+    baseline = load_json(baseline_path, findings, "S103")
+    required_baseline_fields = {"schema", "accepted_at", "producer", "measurements"}
+    if not isinstance(baseline, dict) or set(baseline) != required_baseline_fields:
+        findings.append(Finding("S104", "evidence/metron-baseline.json", "baseline fields are wrong"))
+    elif (
+        baseline.get("schema") != "site-baseline-v1"
+        or baseline.get("accepted_at") != "2026-08-27"
+        or baseline.get("producer") != "scripts/measure_site.py"
+    ):
+        findings.append(Finding("S105", "evidence/metron-baseline.json", "baseline identity is wrong"))
+    else:
+        try:
+            observed = measure(root)["measurements"]
+        except (OSError, UnicodeError, ValueError, KeyError) as exc:
+            findings.append(Finding("S106", ".", f"cannot reproduce accepted baseline: {exc}"))
+        else:
+            if baseline.get("measurements") != observed:
+                findings.append(
+                    Finding(
+                        "S107",
+                        "evidence/metron-baseline.json",
+                        f"accepted baseline differs from current measurement: {observed}",
+                    )
+                )
+
+    required_files = (
+        "scripts/demo_site.py",
+        "scripts/public_smoke.py",
+        "study/visual-review.md",
+    )
+    for relative in required_files:
+        path = root / relative
+        if not path.is_file() or path.is_symlink():
+            findings.append(Finding("S108", relative, "delivery evidence file is missing or symbolic"))
+
+
 def check_site(root: Path) -> list[Finding]:
     root = root.resolve()
     findings: list[Finding] = []
@@ -799,6 +867,7 @@ def check_site(root: Path) -> list[Finding]:
     except (OSError, UnicodeError) as exc:
         findings.append(Finding("S076", ".", f"repository boundary read failed: {exc}"))
     check_budgets(root, findings)
+    check_delivery_contract(root, parsed, findings)
     return sorted(set(findings))
 
 

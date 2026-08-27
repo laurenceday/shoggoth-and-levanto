@@ -1087,8 +1087,13 @@ code {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
@@ -1104,6 +1109,10 @@ code {
     background: #fff;
     color: #000;
     font-size: 11pt;
+  }
+
+  html {
+    scroll-behavior: auto;
   }
 
   .site-header,
@@ -1160,6 +1169,14 @@ code {
   .data-table-wrap {
     break-inside: avoid;
     box-shadow: none;
+  }
+
+  .data-table-wrap {
+    overflow: visible;
+  }
+
+  .data-table {
+    min-width: 0;
   }
 
   a {
