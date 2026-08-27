@@ -3,22 +3,178 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="A proposed split between Sage decisions and deterministic local policy.">
+  <meta name="description" content="A proposed policy split between Sage decision signals and deterministic Shoggoth routes.">
   <meta name="theme-color" content="#071312">
-  <title>Policy | Shoggoth + Levanto</title>
-  <link rel="stylesheet" href="assets/style.css?v=20260827">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Shoggoth + Levanto">
+  <meta property="og:title" content="Shoggoth + Levanto">
+  <meta property="og:description" content="A second opinion. Not a second authority.">
+  <meta property="og:url" content="https://laurenceday.github.io/shoggoth-and-levanto/policy.html">
+  <meta property="og:image" content="https://laurenceday.github.io/shoggoth-and-levanto/assets/generated/social-preview.webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Shoggoth and Levanto meet at a cooperative threshold">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Shoggoth + Levanto">
+  <meta name="twitter:description" content="A second opinion. Not a second authority.">
+  <meta name="twitter:image" content="https://laurenceday.github.io/shoggoth-and-levanto/assets/generated/social-preview.webp">
+  <link rel="canonical" href="https://laurenceday.github.io/shoggoth-and-levanto/policy.html">
+  <title>Policy | Question, signal, local route</title>
+  <link rel="stylesheet" href="assets/style.css?v=20260827-3">
 </head>
 <body data-page="policy">
   <a class="skip-link" href="#main">Skip to content</a>
-  <header class="site-header"><nav class="nav-shell" aria-label="Primary"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span><span>Shoggoth + Levanto</span></a><div class="nav-links"><a href="index.html">Overview</a><a href="sage.html">Sage</a><a href="shoggoth.html">Shoggoth</a><a href="handoffs.html">Hand-offs</a><a href="architecture.html">Architecture</a><a href="policy.html" aria-current="page">Policy</a><a href="pilot.html">Pilot</a><a href="limits.html">Limits</a><a href="engineering-primer.html">Engineering</a><a href="sources.html">Sources</a></div></nav></header>
+  <header class="site-header">
+    <nav class="nav-shell" aria-label="Primary">
+      <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span><span>Shoggoth + Levanto</span></a>
+      <div class="nav-links">
+        <a href="index.html">Overview</a><a href="sage.html">Sage</a><a href="shoggoth.html">Shoggoth</a><a href="handoffs.html">Hand-offs</a><a href="architecture.html">Architecture</a><a href="policy.html" aria-current="page">Policy</a><a href="pilot.html">Pilot</a><a href="limits.html">Limits</a><a href="engineering-primer.html">Engineering</a><a href="sources.html">Sources</a>
+      </div>
+    </nav>
+  </header>
   <main id="main">
-    <section class="hero-shell"><div class="hero-grid"><div class="hero-copy"><p class="eyebrow">Decision policy</p><h1>The model answers one question. Local policy chooses the branch.</h1><p class="lede" data-claim="SHELL-POLICY" data-status="proposed">This page will match closed-ended decision kinds to guardrail questions and keep confidence, service status and consequence level in deterministic routing code.</p></div><aside class="status-stack" aria-label="Page status"><span class="status" data-status="proposed">Policy scaffold</span><p>Examples will be illustrative and unexecuted.</p></aside></div></section>
+    <section class="hero-shell">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Decision policy</p>
+          <h1>The model answers.<br><em>Local policy branches.</em></h1>
+          <p class="lede claim" data-claim="POLICY-THESIS" data-status="proposed">A policy edition fixes the question, decision kind, allowed input, response checks, consequence range and route rule before Sage sees a packet.</p>
+          <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+        </div>
+        <aside class="status-stack" aria-label="Page status">
+          <span class="status" data-status="proposed">Policy proposal</span>
+          <p>No production threshold or automatic route is recommended by this edition.</p>
+        </aside>
+      </div>
+    </section>
+
     <div class="page-body">
-      <div class="intro-grid"><p class="section-kicker">What belongs here</p><div class="prose"><h2>A decision result is one input to a stated route.</h2><p>The completed page will distinguish Yes/No, Choice, Scale, Sort and Tags, then show which questions fit review, refusal or low-consequence routing.</p></div></div>
-      <div class="card-grid"><article class="card"><span class="card-index">01</span><h3>Question</h3><p>Use one closed-ended policy question with a fixed identifier.</p></article><article class="card"><span class="card-index">02</span><h3>Result</h3><p>Validate type, model, status and confidence before use.</p></article><article class="card"><span class="card-index">03</span><h3>Route</h3><p>Apply a local threshold and consequence rule.</p></article></div>
-      <a class="next-link" href="pilot.html">Design the first pilot</a>
+      <section class="intro-grid">
+        <p class="section-kicker">Two contracts</p>
+        <div class="prose claim" data-claim="POLICY-SPLIT" data-status="proposed">
+          <h2>Keep the semantic question separate from the consequence rule.</h2>
+          <p class="big-copy">The Sage question asks what the content appears to mean. Local policy asks whether that result is usable here, at this confidence, for this consequence, under this source edition. Only the second contract chooses the route.</p>
+          <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+        </div>
+      </section>
+
+      <section class="section-grid">
+        <p class="section-kicker">Published kinds</p>
+        <div>
+          <div class="data-table-wrap claim" data-claim="POLICY-KINDS" data-status="vendor-reported">
+            <h3>Published answer shapes</h3>
+            <table class="data-table">
+              <thead><tr><th>Sage kind</th><th>Published answer shape</th></tr></thead>
+              <tbody>
+                <tr><td>Yes/No</td><td>Probability, answer, decisiveness</td></tr>
+                <tr><td>Choice</td><td>Chosen option and per-option probabilities</td></tr>
+                <tr><td>Scale</td><td>Expected level on a fixed 0–4 rubric</td></tr>
+                <tr><td>Sort</td><td>Ordered ids and list-level confidence</td></tr>
+                <tr><td>Tags</td><td>Zero or more labels with confidence</td></tr>
+              </tbody>
+            </table>
+            <div class="claim-meta">
+              <span class="status" data-status="vendor-reported">Answer shapes vendor-reported</span>
+              <a class="source-chip" href="sources.html#src-L-KINDS">L-KINDS</a>
+            </div>
+          </div>
+          <div class="data-table-wrap claim" data-claim="POLICY-KINDS-USES" data-status="proposed">
+            <h3>Possible Shoggoth uses</h3>
+            <table class="data-table">
+              <thead><tr><th>Sage kind</th><th>Possible question</th><th>First-pilot use</th></tr></thead>
+              <tbody>
+                <tr><td>Yes/No</td><td>“Does this packet require human review?”</td><td>Add review or refusal.</td></tr>
+                <tr><td>Choice</td><td>“Which specialist queue should inspect this?”</td><td>Suggest a review queue.</td></tr>
+                <tr><td>Scale</td><td>“How sensitive is this content under this rubric?”</td><td>Prioritise review only.</td></tr>
+                <tr><td>Sort</td><td>“Which recorded findings deserve review first?”</td><td>Order an existing queue.</td></tr>
+                <tr><td>Tags</td><td>“Which declared risk labels apply?”</td><td>Add labels for a reviewer.</td></tr>
+              </tbody>
+            </table>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-heading">
+          <p class="section-kicker">Policy edition</p>
+          <h2>Six things that cannot be supplied at runtime.</h2>
+        </div>
+        <div class="card-grid">
+          <article class="card claim" data-claim="POLICY-ID" data-status="proposed">
+            <span class="card-index">01</span><h3>Stable id and digest</h3>
+            <p>The packet names an accepted policy edition; it cannot send new policy prose and call it approved.</p>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+          </article>
+          <article class="card claim" data-claim="POLICY-QUESTION" data-status="proposed">
+            <span class="card-index">02</span><h3>Closed question</h3>
+            <p>The decision kind, instructions and option or rubric definitions are fixed and reviewable.</p>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+          </article>
+          <article class="card claim" data-claim="POLICY-ALLOWLIST" data-status="proposed">
+            <span class="card-index">03</span><h3>Allowed fields</h3>
+            <p>Only declared, redacted content classes may leave the process; every other field is refused.</p>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+          </article>
+          <article class="card claim" data-claim="POLICY-RESPONSE" data-status="proposed">
+            <span class="card-index">04</span><h3>Response contract</h3>
+            <p>The accepted model, schema, status codes and metadata fields are closed rather than best-effort parsed.</p>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+          </article>
+          <article class="card claim" data-claim="POLICY-ROUTE" data-status="proposed">
+            <span class="card-index">05</span><h3>Route rule</h3>
+            <p>Threshold bands map to review, refusal or an explicitly low-consequence route in deterministic code.</p>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+          </article>
+          <article class="card claim" data-claim="POLICY-EXPIRY" data-status="proposed">
+            <span class="card-index">06</span><h3>Expiry and recovery</h3>
+            <p>Source drift, model drift or a failed check expires the policy and leaves replay and human review available.</p>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+          </article>
+        </div>
+      </section>
+
+      <aside class="boundary-callout claim" data-claim="POLICY-CONSEQUENCE" data-status="proposed">
+        <strong>Consequence rule</strong>
+        <p>For levels 2 and 3, a Sage answer can brake. It cannot independently permit.</p>
+        <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span><a class="source-chip" href="sources.html#src-SHOGGOTH">SHOGGOTH consequence levels</a></div>
+      </aside>
+
+      <section>
+        <div class="section-heading">
+          <p class="section-kicker">Illustrative routing</p>
+          <h2>A result becomes a branch only after local checks.</h2>
+        </div>
+        <div class="claim" data-claim="POLICY-EXAMPLE" data-status="illustrative">
+          <span class="example-label">Illustrative and unexecuted</span>
+          <pre class="code-sample"><code>policy needs_human_review/v1
+  kind: yesno
+  allowed_consequence: [0, 1, 2, 3]
+
+if response.status != 200:              refuse semantic route
+if response.model not in accepted:      refuse semantic route
+if response.result.answer == "yes":     require human review
+if packet.consequence &gt;= 2:             keep deterministic gate; never auto-permit
+if response.result.confidence &lt; band:   require human review
+otherwise:                              apply the separately accepted low-consequence rule</code></pre>
+          <div class="claim-meta"><span class="status" data-status="illustrative">Illustrative</span></div>
+        </div>
+      </section>
+
+      <section class="section-grid">
+        <p class="section-kicker">Thresholds</p>
+        <div class="prose">
+          <div class="claim" data-claim="POLICY-THRESHOLD" data-status="unknown">
+            <h2>Pick no number before measuring the errors.</h2>
+            <p class="big-copy">This study does not know a safe universal confidence band. The pilot must record disagreement, false review, false refusal, service failure and consequence before a threshold can be accepted for one question and one packet distribution.</p>
+            <div class="claim-meta"><span class="status" data-status="unknown">Unknown</span></div>
+          </div>
+        </div>
+      </section>
+
+      <a class="next-link" href="pilot.html">Design the reversible pilot</a>
     </div>
   </main>
-  <footer class="site-footer"><div class="footer-shell"><p data-edition="cooperative-v1">Edition cooperative-v1 · Research and proposal</p><p><a href="sources.html">Source record</a></p></div></footer>
+  <footer class="site-footer"><div class="footer-shell"><p data-edition="cooperative-v1">Edition cooperative-v1 · no production threshold selected</p><p><a href="sources.html">Source and claim record</a></p></div></footer>
 </body>
 </html>

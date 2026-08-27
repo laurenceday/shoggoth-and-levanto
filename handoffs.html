@@ -3,22 +3,140 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="A map of Shoggoth's bounded agent hand-offs.">
+  <meta name="description" content="Where bounded Shoggoth packets cross roles, and where an advisory Sage checkpoint could sit.">
   <meta name="theme-color" content="#071312">
-  <title>Hand-offs | Shoggoth + Levanto</title>
-  <link rel="stylesheet" href="assets/style.css?v=20260827">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Shoggoth + Levanto">
+  <meta property="og:title" content="Shoggoth + Levanto">
+  <meta property="og:description" content="A second opinion. Not a second authority.">
+  <meta property="og:url" content="https://laurenceday.github.io/shoggoth-and-levanto/handoffs.html">
+  <meta property="og:image" content="https://laurenceday.github.io/shoggoth-and-levanto/assets/generated/social-preview.webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Shoggoth and Levanto meet at a cooperative threshold">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Shoggoth + Levanto">
+  <meta name="twitter:description" content="A second opinion. Not a second authority.">
+  <meta name="twitter:image" content="https://laurenceday.github.io/shoggoth-and-levanto/assets/generated/social-preview.webp">
+  <link rel="canonical" href="https://laurenceday.github.io/shoggoth-and-levanto/handoffs.html">
+  <title>Hand-offs | Put judgment at the seam</title>
+  <link rel="stylesheet" href="assets/style.css?v=20260827-3">
 </head>
 <body data-page="handoffs">
   <a class="skip-link" href="#main">Skip to content</a>
-  <header class="site-header"><nav class="nav-shell" aria-label="Primary"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span><span>Shoggoth + Levanto</span></a><div class="nav-links"><a href="index.html">Overview</a><a href="sage.html">Sage</a><a href="shoggoth.html">Shoggoth</a><a href="handoffs.html" aria-current="page">Hand-offs</a><a href="architecture.html">Architecture</a><a href="policy.html">Policy</a><a href="pilot.html">Pilot</a><a href="limits.html">Limits</a><a href="engineering-primer.html">Engineering</a><a href="sources.html">Sources</a></div></nav></header>
+  <header class="site-header">
+    <nav class="nav-shell" aria-label="Primary">
+      <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span><span>Shoggoth + Levanto</span></a>
+      <div class="nav-links">
+        <a href="index.html">Overview</a><a href="sage.html">Sage</a><a href="shoggoth.html">Shoggoth</a><a href="handoffs.html" aria-current="page">Hand-offs</a><a href="architecture.html">Architecture</a><a href="policy.html">Policy</a><a href="pilot.html">Pilot</a><a href="limits.html">Limits</a><a href="engineering-primer.html">Engineering</a><a href="sources.html">Sources</a>
+      </div>
+    </nav>
+  </header>
   <main id="main">
-    <section class="hero-shell"><div class="hero-grid"><div class="hero-copy"><p class="eyebrow">Present flow</p><h1>Every hand-off has an edge.</h1><p class="lede" data-claim="SHELL-HANDOFFS" data-status="proposed">This page will show what enters a bounded worker packet, what returns, and where the controller retains state and authority.</p></div><aside class="status-stack" aria-label="Page status"><span class="status" data-status="proposed">Page scaffold</span><p>The future Sage edge stays separate from the current flow.</p></aside></div></section>
+    <section class="hero-shell">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">The seams between roles</p>
+          <h1>Put judgment where <em>context changes hands.</em></h1>
+          <p class="lede claim" data-claim="HANDOFF-THESIS" data-status="proposed">A Sage checkpoint is most legible between a bounded packet and a consequential next step—not inside a skill's evidence check and not after the action has already happened.</p>
+          <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+        </div>
+        <aside class="status-stack" aria-label="Page status">
+          <span class="status" data-status="proposed">Checkpoint proposed</span>
+          <p>Current hand-offs and proposed additions are labelled separately.</p>
+        </aside>
+      </div>
+    </section>
+
     <div class="page-body">
-      <div class="intro-grid"><p class="section-kicker">What belongs here</p><div class="prose"><h2>Packets carry enough source to do one job, not enough authority to widen it.</h2><p>The finished map will distinguish routing, study, implementation, audit, prose and push boundaries before it proposes a new classifier checkpoint.</p></div></div>
-      <div class="card-grid"><article class="card"><span class="card-index">01</span><h3>Source-bound</h3><p>The worker receives the exact study or runbook packet.</p></article><article class="card"><span class="card-index">02</span><h3>Role-bound</h3><p>Surveyor, Mason, Warden and Scribe each own a different result.</p></article><article class="card"><span class="card-index">03</span><h3>Controller-bound</h3><p>Only the controller receipts and advances the delivery.</p></article></div>
-      <a class="next-link" href="architecture.html">Place the proposed checkpoint</a>
+      <section class="intro-grid">
+        <p class="section-kicker">Current packet rule</p>
+        <div class="prose claim" data-claim="HANDOFF-CURRENT" data-status="current">
+          <h2>A hand-off carries less than the whole conversation.</h2>
+          <p class="big-copy">Fiat workers receive source-bound briefs for one role and one phase. The packet names the branch, runbook step, evidence boundary and exact output owed; the controller keeps the durable state and receipt sequence.</p>
+          <div class="claim-meta"><span class="status" data-status="current">Current</span><a class="source-chip" href="sources.html#src-SHOGGOTH">SHOGGOTH · Fiat packets</a></div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-heading">
+          <p class="section-kicker">Current delivery chain</p>
+          <h2>Every crossing already has an owner.</h2>
+        </div>
+        <div class="flow claim" data-claim="HANDOFF-CHAIN" data-status="current">
+          <article class="flow-step"><span class="card-index">Study</span><h3>Surveyor → Protasis</h3><p>Assumptions, sources, options, risks and proof cross into a content-contract review.</p></article>
+          <article class="flow-step"><span class="card-index">Build</span><h3>Protasis → Mason</h3><p>One discrete green-to-green step crosses into implementation.</p></article>
+          <article class="flow-step"><span class="card-index">Review</span><h3>Mason → Warden</h3><p>The exact signed tree, test contract and risk register cross into audit.</p></article>
+          <article class="flow-step"><span class="card-index">Publish</span><h3>Warden → Scribe</h3><p>A clean audited tree crosses into the human prose and pull-request pass.</p></article>
+          <article class="flow-step authority"><span class="card-index">Act</span><h3>Scribe → Controller</h3><p>Checked bytes cross into push, ordered merge and one integration transition.</p></article>
+        </div>
+        <div class="claim-meta"><span class="status" data-status="current">Current</span><a class="source-chip" href="sources.html#src-SHOGGOTH">SHOGGOTH</a></div>
+      </section>
+
+      <section>
+        <div class="section-heading">
+          <p class="section-kicker">Candidate checkpoints</p>
+          <h2>Three seams worth testing, in conservative order.</h2>
+        </div>
+        <div class="card-grid">
+          <article class="card claim" data-claim="HANDOFF-SOURCE-TRIAGE" data-status="proposed">
+            <span class="card-index">01 · Research</span>
+            <h3>Does this source need human review?</h3>
+            <p>Sage may flag a public document or mutable vendor claim for extra review. It cannot promote that material into a stronger evidence class.</p>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+          </article>
+          <article class="card claim" data-claim="HANDOFF-AUDIT-TRIAGE" data-status="proposed">
+            <span class="card-index">02 · Audit</span>
+            <h3>Which finding deserves attention first?</h3>
+            <p>Sage may sort or tag already-recorded findings for a reviewer. It cannot lower severity, close a finding or replace the clean-round rule.</p>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+          </article>
+          <article class="card claim" data-claim="HANDOFF-PUBLISH-BRAKE" data-status="proposed">
+            <span class="card-index">03 · Publication</span>
+            <h3>Should this packet pause?</h3>
+            <p>In the first pilot, Sage may request review or refusal before publication. It cannot remove a deterministic gate or permit the merge.</p>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+          </article>
+        </div>
+      </section>
+
+      <aside class="boundary-callout claim" data-claim="HANDOFF-BRAKE" data-status="proposed">
+        <strong>First-pilot asymmetry</strong>
+        <p>Sage may add friction. It may not take friction away.</p>
+        <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span><a class="source-chip" href="pilot.html#braking-authority">pilot design</a></div>
+      </aside>
+
+      <section class="section-grid">
+        <p class="section-kicker">Packet minimum</p>
+        <div>
+          <div class="data-table-wrap claim" data-claim="HANDOFF-PACKET" data-status="proposed">
+            <table class="data-table">
+              <thead><tr><th>Field</th><th>Why it crosses</th><th>What stays out</th></tr></thead>
+              <tbody>
+                <tr><td>packet_id + digest</td><td>Join the result to the exact bounded input.</td><td>Raw conversation history.</td></tr>
+                <tr><td>policy_id + digest</td><td>Fix the question, threshold and consequence rule.</td><td>Mutable free-form policy.</td></tr>
+                <tr><td>question + allowed content</td><td>Give Sage only the semantic material it needs.</td><td>Secrets, private paths and undeclared fields.</td></tr>
+                <tr><td>requested transition</td><td>Let local policy reason about consequence.</td><td>Authority to execute it.</td></tr>
+                <tr><td>visible gaps</td><td>Keep unknowns from becoming silent negatives.</td><td>Hidden chain-of-thought or private payloads.</td></tr>
+              </tbody>
+            </table>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-grid">
+        <p class="section-kicker">Never cross</p>
+        <div class="prose claim" data-claim="HANDOFF-NEVER" data-status="proposed">
+          <h2>No secret, no full context dump, no implied permission.</h2>
+          <p class="big-copy">A future adapter refuses packets with undeclared fields, credentials, private filesystem paths, oversized content, missing policy digests or a destination outside its allowlist. Refusal leaves the original Shoggoth inspection and human-review routes available.</p>
+          <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+        </div>
+      </section>
+
+      <a class="next-link" href="architecture.html">Place the full checkpoint</a>
     </div>
   </main>
-  <footer class="site-footer"><div class="footer-shell"><p data-edition="cooperative-v1">Edition cooperative-v1 · Research and proposal</p><p><a href="sources.html">Source record</a></p></div></footer>
+  <footer class="site-footer"><div class="footer-shell"><p data-edition="cooperative-v1">Edition cooperative-v1 · current hand-offs and proposed checkpoints</p><p><a href="sources.html">Source and claim record</a></p></div></footer>
 </body>
 </html>

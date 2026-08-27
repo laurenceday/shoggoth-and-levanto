@@ -3,22 +3,146 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Authority, confidence, privacy and service limits for the proposed design.">
+  <meta name="description" content="Authority, confidence, privacy, service and source limits for the proposed design.">
   <meta name="theme-color" content="#071312">
-  <title>Limits | Shoggoth + Levanto</title>
-  <link rel="stylesheet" href="assets/style.css?v=20260827">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Shoggoth + Levanto">
+  <meta property="og:title" content="Shoggoth + Levanto">
+  <meta property="og:description" content="A second opinion. Not a second authority.">
+  <meta property="og:url" content="https://laurenceday.github.io/shoggoth-and-levanto/limits.html">
+  <meta property="og:image" content="https://laurenceday.github.io/shoggoth-and-levanto/assets/generated/social-preview.webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Shoggoth and Levanto meet at a cooperative threshold">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Shoggoth + Levanto">
+  <meta name="twitter:description" content="A second opinion. Not a second authority.">
+  <meta name="twitter:image" content="https://laurenceday.github.io/shoggoth-and-levanto/assets/generated/social-preview.webp">
+  <link rel="canonical" href="https://laurenceday.github.io/shoggoth-and-levanto/limits.html">
+  <title>Limits | Start with what can fail</title>
+  <link rel="stylesheet" href="assets/style.css?v=20260827-3">
 </head>
 <body data-page="limits">
   <a class="skip-link" href="#main">Skip to content</a>
-  <header class="site-header"><nav class="nav-shell" aria-label="Primary"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span><span>Shoggoth + Levanto</span></a><div class="nav-links"><a href="index.html">Overview</a><a href="sage.html">Sage</a><a href="shoggoth.html">Shoggoth</a><a href="handoffs.html">Hand-offs</a><a href="architecture.html">Architecture</a><a href="policy.html">Policy</a><a href="pilot.html">Pilot</a><a href="limits.html" aria-current="page">Limits</a><a href="engineering-primer.html">Engineering</a><a href="sources.html">Sources</a></div></nav></header>
+  <header class="site-header">
+    <nav class="nav-shell" aria-label="Primary">
+      <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span><span>Shoggoth + Levanto</span></a>
+      <div class="nav-links">
+        <a href="index.html">Overview</a><a href="sage.html">Sage</a><a href="shoggoth.html">Shoggoth</a><a href="handoffs.html">Hand-offs</a><a href="architecture.html">Architecture</a><a href="policy.html">Policy</a><a href="pilot.html">Pilot</a><a href="limits.html" aria-current="page">Limits</a><a href="engineering-primer.html">Engineering</a><a href="sources.html">Sources</a>
+      </div>
+    </nav>
+  </header>
   <main id="main">
-    <section class="hero-shell"><div class="hero-grid"><div class="hero-copy"><p class="eyebrow">Failure boundary</p><h1>The useful design begins with what can fail.</h1><p class="lede" data-claim="SHELL-LIMITS" data-status="proposed">This page will keep authority inversion, confidence misuse, data egress, diagnostic retention, service failure, policy drift and source drift visible.</p></div><aside class="status-stack" aria-label="Page status"><span class="status" data-status="proposed">Risk scaffold</span><p>Future controls remain proposed until a live adapter is separately built and tested.</p></aside></div></section>
+    <section class="hero-shell">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Failure boundary</p>
+          <h1>The useful design starts with <em>what can fail.</em></h1>
+          <p class="lede claim" data-claim="LIMITS-THESIS" data-status="proposed">A clean typed response can still be wrong evidence, the wrong edition, too sensitive to send, too expensive to call or too consequential to route.</p>
+          <div class="claim-meta"><span class="status" data-status="proposed">Proposed risk model</span></div>
+        </div>
+        <aside class="status-stack" aria-label="Page status">
+          <span class="status" data-status="proposed">Controls proposed</span>
+          <p>Published vendor behaviour and this study's controls are not given the same status.</p>
+        </aside>
+      </div>
+    </section>
+
     <div class="page-body">
-      <div class="intro-grid"><p class="section-kicker">What belongs here</p><div class="prose"><h2>A clean-looking decision can still be the wrong evidence.</h2><p>The finished page will name refusal and recovery for each boundary, including 400, 401, 402 and 503 service states and the difference between decisiveness and correctness.</p></div></div>
-      <div class="card-grid"><article class="card"><span class="card-index">A</span><h3>Authority</h3><p>A model result cannot become an evidence receipt by relabelling it.</p></article><article class="card"><span class="card-index">B</span><h3>Data</h3><p>Only declared fields may cross a future hosted boundary.</p></article><article class="card"><span class="card-index">C</span><h3>Failure</h3><p>Unavailable or malformed decisions stop the dependent route.</p></article></div>
-      <a class="next-link" href="engineering-primer.html">Read the engineering boundary</a>
+      <section>
+        <div class="section-heading">
+          <p class="section-kicker">Eight boundaries</p>
+          <h2>Failure stays visible, local and recoverable.</h2>
+        </div>
+        <div class="risk-grid">
+          <article class="risk claim" data-claim="LIMIT-AUTHORITY" data-status="proposed">
+            <h3>Authority inversion</h3>
+            <p>A useful semantic answer is mistaken for proof that a Promise Machine gate passed. Control: preserve separate evidence classes and never return permission from the adapter.</p>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed control</span></div>
+          </article>
+          <article class="risk">
+            <h3>Confidence misread</h3>
+            <p class="claim" data-claim="LIMIT-CONFIDENCE" data-status="vendor-reported">Yes/No confidence is published as decisiveness away from a tie, not correctness for Shoggoth's packet distribution.</p>
+            <p class="claim" data-claim="LIMIT-CONFIDENCE-CONTROL" data-status="proposed">Control: measure errors by policy and consequence.</p>
+            <div class="claim-meta"><span class="status" data-status="vendor-reported">Definition vendor-reported</span><a class="source-chip" href="sources.html#src-L-KINDS">L-KINDS</a><span class="status" data-status="proposed">Control proposed</span></div>
+          </article>
+          <article class="risk">
+            <h3>Service failure</h3>
+            <p class="claim" data-claim="LIMIT-SERVICE" data-status="vendor-reported">The public contract names 400, 401, 402 and 503 states.</p>
+            <p class="claim" data-claim="LIMIT-SERVICE-CONTROL" data-status="proposed">Control: every non-success or timeout refuses the dependent semantic route without bypassing the existing path.</p>
+            <div class="claim-meta"><span class="status" data-status="vendor-reported">Errors vendor-reported</span><a class="source-chip" href="sources.html#src-L-ERRORS">L-ERRORS</a><span class="status" data-status="proposed">Control proposed</span></div>
+          </article>
+          <article class="risk">
+            <h3>Diagnostic retention</h3>
+            <p class="claim" data-claim="LIMIT-RETENTION" data-status="vendor-reported">Ordinary inference is described as zero-retention, but failed or slow requests may retain redacted full payloads for 30 days.</p>
+            <p class="claim" data-claim="LIMIT-RETENTION-CONTROL" data-status="proposed">Control: classify and minimise every field as though that exception may apply.</p>
+            <div class="claim-meta"><span class="status" data-status="vendor-reported">Policy vendor-reported</span><a class="source-chip" href="sources.html#src-L-PRIVACY">L-PRIVACY</a><span class="status" data-status="proposed">Control proposed</span></div>
+          </article>
+          <article class="risk claim" data-claim="LIMIT-CREDENTIALS" data-status="proposed">
+            <h3>Credential leak</h3>
+            <p>A key reaches browser code, a URL, a command argument, a fixture or a diagnostic. Control: keep credentials in a separately authorised server process and reject credential-shaped packet content.</p>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed control</span></div>
+          </article>
+          <article class="risk claim" data-claim="LIMIT-SCHEMA" data-status="proposed">
+            <h3>Schema or model drift</h3>
+            <p>The service changes an accepted field, model id or answer shape. Control: closed parsing, pinned contract digests and policy expiry instead of permissive fallback.</p>
+            <div class="claim-meta"><span class="status" data-status="proposed">Proposed control</span></div>
+          </article>
+          <article class="risk claim" data-claim="LIMIT-SOURCE" data-status="inferred">
+            <h3>Source drift</h3>
+            <p>Levanto's web docs are mutable while Shoggoth's current contract is commit-pinned. Control: record observation dates and digests, then force claim review when an edition changes.</p>
+            <div class="claim-meta"><span class="status" data-status="inferred">Inferred</span><a class="source-chip" href="sources.html#src-L-INDEX">L-INDEX</a><a class="source-chip" href="sources.html#src-SHOGGOTH">SHOGGOTH</a></div>
+          </article>
+          <article class="risk claim" data-claim="LIMIT-ENDORSEMENT" data-status="current">
+            <h3>Endorsement drift</h3>
+            <p>A public proposal is mistaken for an approved joint product. Control: this edition says research and proposal, uses no Levanto logo and claims no commercial agreement or production integration.</p>
+            <div class="claim-meta"><span class="status" data-status="current">Current edition</span><a class="source-chip" href="sources.html#src-TARGET">TARGET</a></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section-grid">
+        <p class="section-kicker">Vendor benchmark</p>
+        <div class="prose claim" data-claim="LIMIT-BENCHMARK" data-status="vendor-reported">
+          <h2>A useful record with unlike clocks.</h2>
+          <p class="big-copy">Levanto's dated Sage-versus-Claude benchmark is vendor-run. Its Sage model latency excludes network while the Claude wall-clock includes network, and the tested Sage model predates the current OpenAPI default. This edition draws no neutral latency result or service-level promise from it.</p>
+          <div class="claim-meta"><span class="status" data-status="vendor-reported">Vendor-reported</span><a class="source-chip" href="sources.html#src-L-BENCH">L-BENCH · 2026-07-23</a></div>
+        </div>
+      </section>
+
+      <section class="section-grid">
+        <p class="section-kicker">Cost and capacity</p>
+        <div class="prose claim" data-claim="LIMIT-COST" data-status="unknown">
+          <h2>No cost forecast without a packet distribution.</h2>
+          <p class="big-copy">Public pricing and limits can describe current commercial rules. They cannot establish this design's call volume, review cost, timeout budget or acceptable failure rate. Those remain unknown until the pilot fixes a workload.</p>
+          <div class="claim-meta"><span class="status" data-status="unknown">Unknown</span><a class="source-chip" href="sources.html#src-L-PRICING">L-PRICING</a><a class="source-chip" href="sources.html#src-L-LIMITS">L-LIMITS</a></div>
+        </div>
+      </section>
+
+      <aside class="boundary-callout claim" data-claim="LIMIT-FAIL-CLOSED" data-status="proposed">
+        <strong>Failure posture</strong>
+        <p>When the semantic route fails, the system loses that advice—not its evidence, inspection path or human recovery.</p>
+        <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+      </aside>
+
+      <section class="section-grid">
+        <p class="section-kicker">Before any live call</p>
+        <div>
+          <ul class="check-list claim" data-claim="LIMIT-GATES" data-status="proposed">
+            <li>Accept the exact packet, policy and response schemas.</li>
+            <li>Approve data classes, redaction, retention assumptions and destination.</li>
+            <li>Define timeout, retry and every documented error branch.</li>
+            <li>Measure false review and false refusal on versioned fixtures.</li>
+            <li>Choose who can suspend, rotate and revoke the adapter.</li>
+            <li>Keep the Promise Machine and controller gates unchanged.</li>
+          </ul>
+          <div class="claim-meta"><span class="status" data-status="proposed">Proposed</span></div>
+        </div>
+      </section>
+
+      <a class="next-link" href="engineering-primer.html">Translate the limits into engineering rules</a>
     </div>
   </main>
-  <footer class="site-footer"><div class="footer-shell"><p data-edition="cooperative-v1">Edition cooperative-v1 · Research and proposal</p><p><a href="sources.html">Source record</a></p></div></footer>
+  <footer class="site-footer"><div class="footer-shell"><p data-edition="cooperative-v1">Edition cooperative-v1 · legal pages reported, not interpreted as legal advice</p><p><a href="sources.html">Source and claim record</a></p></div></footer>
 </body>
 </html>
